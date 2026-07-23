@@ -1,0 +1,6 @@
+- Root page
+- About page
+- Portofolio
+- Store
+- Blog
+- Contact

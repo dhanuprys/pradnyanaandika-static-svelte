@@ -1,0 +1,118 @@
+---
+title: Getting Started with Our Blog
+description: Welcome to the Pradnya blog! This is an example post demonstrating all the features available in our mdsvex-powered blog system.
+date: '2025-07-23'
+author: Pradnya Team
+tags:
+  - tutorial
+  - getting-started
+draft: false
+---
+
+Welcome to the Pradnya blog! This post demonstrates all the markdown features available for writing blog posts.
+
+## Writing Content
+
+Blog posts are written in standard Markdown with full **GitHub-Flavored Markdown** support. You can use _italics_, **bold**, ~~strikethrough~~, and `inline code`.
+
+### Headings
+
+All headings automatically get anchor links, so readers can link directly to any section of your post.
+
+## Code Blocks
+
+Code blocks are highlighted at build time using Shiki — zero JavaScript is sent to the browser.
+
+```typescript
+interface BlogPost {
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+}
+
+function getLatestPosts(posts: BlogPost[]): BlogPost[] {
+  return posts
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+}
+```
+
+```svelte
+<script lang="ts">
+  let count = $state(0);
+</script>
+
+<button onclick={() => count++}>
+  Count: {count}
+</button>
+```
+
+## Tables
+
+Tables are supported via remark-gfm:
+
+| Feature | Status | Notes |
+| --- | --- | --- |
+| Markdown rendering | ✅ | Full GFM support |
+| Code highlighting | ✅ | Shiki (build-time) |
+| SEO meta tags | ✅ | Auto-generated from frontmatter |
+| RSS feed | ✅ | Available at `/rss.xml` |
+| Sitemap | ✅ | Available at `/sitemap.xml` |
+
+## Lists
+
+### Unordered
+
+- Write posts in Markdown
+- Co-locate images with your content
+- Use Svelte components inline
+
+### Ordered
+
+1. Create a folder: `src/lib/data/blogs/YYYY/MM-DD/my-post/`
+2. Add a `page.md` with frontmatter
+3. Start writing!
+
+### Task Lists
+
+- [x] Set up mdsvex
+- [x] Configure Shiki highlighting
+- [x] Add remark-gfm support
+- [ ] Write more blog posts
+
+## Blockquotes
+
+> The best way to predict the future is to create it.
+>
+> — Abraham Lincoln
+
+## Using Svelte Components
+
+You can import and use Svelte components directly in your markdown:
+
+```markdown
+<script>
+  import MyComponent from '$lib/components/MyComponent.svelte';
+</script>
+
+<MyComponent prop="value" />
+```
+
+## Images
+
+To use co-located images, import them in a script tag at the top of your markdown file:
+
+```markdown
+<script>
+  import coverImage from './cover.jpg';
+</script>
+
+<img src={coverImage} alt="Description" />
+```
+
+Images placed in the same folder as `page.md` are processed by Vite with content hashing for optimal caching.
+
+---
+
+That's it! Create a new folder under `src/lib/data/blogs/YYYY/MM-DD/your-slug/` and start writing.
