@@ -246,7 +246,7 @@
 		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each data.posts.slice(0, 4) as post (post.slug)}
 				<ArticleCard
-					image={`/blogs/${post.slug}/cover.png`}
+					image={post.image || ''}
 					category={post.metadata.tags[0]}
 					date={new Date(post.metadata.date).toLocaleDateString('id-ID', {
 						day: 'numeric',

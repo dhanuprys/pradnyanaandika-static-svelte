@@ -59,6 +59,13 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 		import: 'default'
 	});
 
+	// Import cover images
+	const coverImages = import.meta.glob('/src/lib/data/blogs/**/cover.png', {
+		eager: true,
+		query: '?url',
+		import: 'default'
+	});
+
 	const posts: BlogPost[] = [];
 
 	for (const [path, module] of Object.entries(modules)) {
@@ -71,7 +78,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 		const raw = (rawModules[path] as string) ?? '';
 		const readingTime = calculateReadingTime(raw);
 
-		posts.push({ slug, metadata, readingTime });
+		// Find the matching cover image
+		const imagePath = path.replace('page.svx', 'cover.png');
+		const image = (coverImages[imagePath] as string) ?? '';
+
+		posts.push({ slug, metadata, readingTime, image });
 	}
 
 	// Sort by date descending (newest first)
@@ -106,11 +117,20 @@ export async function getPostBySlug(slug: string): Promise<BlogPostWithContent> 
 	const raw = rawLoader ? ((await rawLoader()) as string) : '';
 	const readingTime = calculateReadingTime(raw);
 
+	const coverImages = import.meta.glob('/src/lib/data/blogs/**/cover.png', {
+		query: '?url',
+		import: 'default'
+	});
+	const imagePath = path.replace('page.svx', 'cover.png');
+	const imageLoader = coverImages[imagePath];
+	const image = imageLoader ? ((await imageLoader()) as string) : '';
+
 	return {
 		slug,
 		metadata: module.metadata,
 		content: module.default,
-		readingTime
+		readingTime,
+		image
 	};
 }
 

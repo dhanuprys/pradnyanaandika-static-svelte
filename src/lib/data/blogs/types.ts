@@ -36,6 +36,8 @@ export interface BlogPost {
 	metadata: BlogFrontmatter;
 	/** Estimated reading time (e.g., "5 min read") */
 	readingTime: string;
+	/** Imported URL to the cover image */
+	image?: string;
 }
 
 /**

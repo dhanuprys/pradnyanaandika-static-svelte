@@ -36,9 +36,9 @@
 					<p>Belum ada artikel.</p>
 				</div>
 			{:else}
-				{#each data.posts as post}
+				{#each data.posts as post (post.slug)}
 					<ArticleCard
-						image={`/blogs/${post.slug}/cover.png`}
+						image={post.image || ''}
 						category={post.metadata.tags[0]}
 						date={new Date(post.metadata.date).toLocaleDateString('id-ID', {
 							day: 'numeric',
