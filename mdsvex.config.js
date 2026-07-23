@@ -45,4 +45,3 @@ const config = defineMDSveXConfig({
 });
 
 export default config;
-

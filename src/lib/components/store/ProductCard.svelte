@@ -32,22 +32,26 @@
 			<h3 class="text-xl font-semibold text-white">{product.name}</h3>
 			<span class="font-medium text-primary-300">{formattedPrice}</span>
 		</div>
-		
+
 		<p class="mb-4 line-clamp-2 flex-1 text-sm text-gray-400">{product.shortDescription}</p>
 
 		<div class="mt-auto flex items-center justify-between">
 			<div class="flex gap-2">
 				{#if product.stock > 0}
-					<span class="inline-flex items-center rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-400">
+					<span
+						class="inline-flex items-center rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-400"
+					>
 						In Stock
 					</span>
 				{:else}
-					<span class="inline-flex items-center rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-400">
+					<span
+						class="inline-flex items-center rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-400"
+					>
 						Out of Stock
 					</span>
 				{/if}
 			</div>
-			
+
 			<span class="text-sm font-medium text-white/50 transition-colors group-hover:text-white">
 				View Details &rarr;
 			</span>

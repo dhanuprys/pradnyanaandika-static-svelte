@@ -34,13 +34,19 @@
 								}
 							}}
 							aria-current={activeImageIndex === i ? 'true' : undefined}
-							class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white/5 text-sm font-medium uppercase text-gray-900 hover:bg-white/10 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+							class="focus:ring-opacity-50 relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white/5 text-sm font-medium text-gray-900 uppercase hover:bg-white/10 focus:ring focus:ring-offset-4 focus:outline-none"
 							class:ring-2={activeImageIndex === i}
 							class:ring-primary-500={activeImageIndex === i}
 						>
 							<span class="sr-only">View image {i + 1}</span>
 							<span class="absolute inset-0 overflow-hidden rounded-md">
-								<img src={image} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover object-center" />
+								<img
+									src={image}
+									alt=""
+									loading="lazy"
+									decoding="async"
+									class="h-full w-full object-cover object-center"
+								/>
 							</span>
 							<!-- Active overlay -->
 							<span
@@ -54,11 +60,13 @@
 			</div>
 
 			<!-- Main image -->
-			<div class="aspect-square w-full overflow-hidden rounded-2xl bg-white/5 border border-white/10 shadow-2xl">
+			<div
+				class="aspect-square w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl"
+			>
 				<img
 					src={product.images[activeImageIndex]}
 					alt={product.name}
-					class="h-full w-full object-cover object-center sm:rounded-lg transition-all duration-500"
+					class="h-full w-full object-cover object-center transition-all duration-500 sm:rounded-lg"
 				/>
 			</div>
 		</div>
@@ -95,10 +103,12 @@
 
 			{#if product.tags && product.tags.length > 0}
 				<div class="mt-8">
-					<h3 class="text-sm font-medium text-white mb-3">Tags</h3>
+					<h3 class="mb-3 text-sm font-medium text-white">Tags</h3>
 					<div class="flex flex-wrap gap-2">
 						{#each product.tags as tag (tag)}
-							<span class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-gray-300">
+							<span
+								class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-gray-300"
+							>
 								{tag}
 							</span>
 						{/each}
@@ -110,7 +120,7 @@
 				{#if product.stock > 0}
 					<button
 						type="button"
-						class="flex max-w-xs flex-1 items-center justify-center rounded-xl bg-primary-600 px-8 py-3 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900 sm:w-full transition-colors"
+						class="flex max-w-xs flex-1 items-center justify-center rounded-xl bg-primary-600 px-8 py-3 text-base font-medium text-white transition-colors hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none sm:w-full"
 					>
 						Contact to Buy
 					</button>
@@ -118,7 +128,7 @@
 					<button
 						type="button"
 						disabled
-						class="flex max-w-xs flex-1 items-center justify-center rounded-xl bg-gray-700 px-8 py-3 text-base font-medium text-gray-400 cursor-not-allowed sm:w-full"
+						class="flex max-w-xs flex-1 cursor-not-allowed items-center justify-center rounded-xl bg-gray-700 px-8 py-3 text-base font-medium text-gray-400 sm:w-full"
 					>
 						Out of Stock
 					</button>

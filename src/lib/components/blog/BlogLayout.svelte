@@ -111,7 +111,7 @@
 	</header>
 
 	<!-- Article content with Tailwind Typography prose styling -->
-	<div class="prose prose-gray max-w-none">
+	<div class="prose max-w-none prose-gray">
 		{@render children()}
 	</div>
 </article>

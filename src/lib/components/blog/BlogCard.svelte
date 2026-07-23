@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { BlogPost } from '$lib/data/blogs/types';
+	import { resolve } from '$app/paths';
 
 	let { post }: { post: BlogPost } = $props();
 
@@ -12,7 +13,7 @@
 	);
 </script>
 
-<a href="/blogs/{post.slug}" class="group block">
+<a href={resolve(`/blogs/${post.slug}`)} class="group block">
 	<article class="rounded-lg border border-gray-200 p-5 transition-colors hover:border-gray-400">
 		<h2 class="text-lg font-semibold text-gray-900 group-hover:underline">
 			{post.metadata.title}
@@ -30,7 +31,7 @@
 
 		{#if post.metadata.tags.length > 0}
 			<div class="mt-2 flex flex-wrap gap-1.5">
-				{#each post.metadata.tags as tag}
+				{#each post.metadata.tags as tag (tag)}
 					<span
 						class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
 					>

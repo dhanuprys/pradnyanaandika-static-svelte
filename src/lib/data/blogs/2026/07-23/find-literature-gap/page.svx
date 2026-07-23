@@ -1,0 +1,24 @@
+---
+title: Cara Ampuh Menemukan Research Gap dalam Kajian Literatur
+description: Pelajari teknik sistematis untuk menemukan celah penelitian yang belum banyak dibahas oleh peneliti lain.
+date: '2026-07-21'
+author: Andika Academy
+tags: ['literatur', 'research-gap', 'metodologi']
+---
+
+*Research Gap* atau celah penelitian adalah alasan utama mengapa penelitian Anda layak untuk dilakukan. Tanpa celah ini, penelitian Anda hanya akan mengulang apa yang sudah dilakukan orang lain. Bagaimana cara mencarinya?
+
+## 1. Baca Bagian 'Saran' atau 'Future Research'
+Cara paling mudah adalah dengan membaca jurnal-jurnal terbaru di bidang Anda, lalu langsung menuju bagian Kesimpulan dan Saran. Peneliti biasanya secara eksplisit menuliskan kelemahan penelitian mereka dan merekomendasikan hal yang perlu diteliti lebih lanjut.
+
+## 2. Temukan Pertentangan Hasil (Contradictory Evidence)
+Jika Peneliti A mengatakan bahwa X berpengaruh positif terhadap Y, namun Peneliti B menemukan bahwa X tidak berpengaruh, maka ada "celah" di sana. Anda bisa masuk untuk meneliti mengapa terjadi perbedaan hasil tersebut.
+
+## 3. Terapkan Konsep Lama pada Konteks Baru
+Pernahkah sebuah teori diuji di konteks negara maju namun belum diuji di negara berkembang? Ini bisa menjadi *contextual gap*.
+
+## 4. Gunakan Software Manajemen Referensi dan Pemetaan
+Gunakan aplikasi seperti Mendeley, Zotero, atau VOSviewer untuk memetakan kata kunci yang sedang tren dan area mana yang masih jarang diteliti. VOSviewer sangat berguna untuk visualisasi bibliometrik.
+
+## Kesimpulan
+Menemukan celah penelitian membutuhkan banyak membaca. Jadikan kegiatan membaca literatur sebagai rutinitas harian!

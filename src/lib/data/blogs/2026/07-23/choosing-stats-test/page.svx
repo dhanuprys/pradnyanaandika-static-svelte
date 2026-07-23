@@ -1,0 +1,31 @@
+---
+title: Panduan Memilih Uji Statistik yang Tepat untuk Penelitian
+description: Bingung menentukan antara Uji-T, ANOVA, Regresi, atau Chi-Square? Panduan ini akan menyederhanakan cara memilih uji statistik.
+date: '2026-07-22'
+author: Andika Academy
+tags: ['statistik', 'kuantitatif', 'spss']
+---
+
+Memilih uji statistik sering kali membingungkan bagi peneliti pemula. Kesalahan memilih uji statistik dapat berakibat fatal pada kesimpulan penelitian. Berikut panduan ringkasnya:
+
+## 1. Kenali Jenis Data Anda
+- **Data Nominal/Ordinal**: Kategorikal (misal: Jenis Kelamin, Tingkat Pendidikan)
+- **Data Interval/Rasio**: Numerik kontinyu (misal: Nilai Ujian, Pendapatan)
+
+## 2. Uji Beda (Komparasi)
+Apakah Anda ingin membandingkan dua kelompok atau lebih?
+- **2 Kelompok (Bebas)**: Gunakan *Independent Sample T-Test*
+- **2 Kelompok (Berpasangan)**: Gunakan *Paired Sample T-Test*
+- **Lebih dari 2 Kelompok**: Gunakan *One-Way ANOVA*
+
+## 3. Uji Hubungan (Korelasi)
+Apakah Anda ingin mencari tahu apakah ada hubungan antara variabel A dan B?
+- Jika data normal: Gunakan *Pearson Correlation*
+- Jika data tidak normal/ordinal: Gunakan *Spearman Rank Correlation*
+
+## 4. Uji Pengaruh (Regresi)
+Apakah Anda ingin memprediksi pengaruh satu variabel terhadap variabel lain?
+- **1 Variabel Bebas**: *Simple Linear Regression*
+- **Lebih dari 1 Variabel Bebas**: *Multiple Linear Regression*
+
+Pastikan selalu melakukan uji asumsi klasik (normalitas, homogenitas) sebelum melakukan uji parametrik di atas!
