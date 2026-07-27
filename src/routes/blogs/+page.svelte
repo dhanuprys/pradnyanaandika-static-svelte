@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { Search, ArrowRight, BookOpen, Clock, Send } from '@lucide/svelte';
 	import ArticleCard from '$lib/components/ui/ArticleCard.svelte';
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
@@ -23,13 +25,14 @@
 			const matchesCategory =
 				selectedCategory === 'all' ||
 				post.metadata.category === selectedCategory ||
-				post.metadata.tags?.some(
-					(tag: string) => tag.toLowerCase() === selectedCategory.toLowerCase()
-				);
+				(post.metadata.tags && post.metadata.tags.includes(selectedCategory));
+
+			const query = searchQuery.toLowerCase();
 			const matchesSearch =
-				searchQuery === '' ||
-				post.metadata.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				post.metadata.description?.toLowerCase().includes(searchQuery.toLowerCase());
+				!query ||
+				post.metadata.title.toLowerCase().includes(query) ||
+				post.metadata.description.toLowerCase().includes(query);
+
 			return matchesCategory && matchesSearch;
 		})
 	);
@@ -46,9 +49,11 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Blog & Artikel Edukasi - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="Blog & Artikel Edukasi | Dr. I Ketut Andika Pradnyana"
+	description="Kumpulan artikel edukator & panduan praktis Dr. I Ketut Andika Pradnyana seputar AI Education, VR Learning, Strategi Publikasi Scopus, dan Analisis Data."
+	canonical="{SITE_CONFIG.url}/blogs"
+/>
 
 <div class="bg-slate-50/50 pb-12 text-slate-800">
 	<!-- Hero Section (Clean navy hero without top badge) -->

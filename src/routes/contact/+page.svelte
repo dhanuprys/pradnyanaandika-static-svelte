@@ -12,6 +12,8 @@
 		ChevronDown,
 		ArrowRight
 	} from '@lucide/svelte';
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
 	import { resolve } from '$app/paths';
 
 	let formSubmitted = $state(false);
@@ -22,6 +24,8 @@
 		email: '',
 		phone: '',
 		subject: '',
+		institution: '',
+		category: 'Konsultasi Penelitian',
 		message: ''
 	});
 
@@ -37,16 +41,20 @@
 		setTimeout(() => {
 			isSubmitting = false;
 			formSubmitted = true;
-		}, 800);
+		}, 1200);
 	}
 
 	const faqs = [
 		{
-			question: 'Bagaimana cara mengajukan kerja sama penelitian atau narasumber?',
-			answer: 'Anda dapat mengisi formulir kontak ini dengan memilih subjek "Kerja Sama / Kolaborasi" atau langsung menghubungi kami melalui WhatsApp.'
+			question: 'Apakah konsultasi penelitian bisa dilakukan secara daring?',
+			answer: 'Ya, seluruh sesi bimbingan dan konsultasi dapat dijadwalkan secara daring melalui Zoom atau Google Meet.'
 		},
 		{
-			question: 'Apakah produk digital di Store dapat diakses secara instan?',
+			question: 'Bagaimana cara mengundang Dr. Andika sebagai narasumber/speker webinar?',
+			answer: 'Anda dapat mengisi formulir kontak di samping dengan memilih kategori "Undangan Narasumber / Speaker" dan mencantumkan detail acara.'
+		},
+		{
+			question: 'Apakah modul dan e-book yang dibeli di store bisa langsung diakses?',
 			answer: 'Ya, seluruh modul, e-book, dan template digital di Academy Store dapat diunduh secara langsung setelah transaksi berhasil.'
 		},
 		{
@@ -56,9 +64,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Hubungi Kami - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="Hubungi Dr. I Ketut Andika Pradnyana | Andika Academy"
+	description="Layanan konsultasi & kontak resmi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. Bimbingan riset, konsultasi instansi, pelatihan AI Education, & pengajuan kerjasama."
+	canonical="{SITE_CONFIG.url}/contact"
+/>
 
 <div class="bg-slate-50/50 pb-16 text-slate-800">
 	<!-- Hero Header -->

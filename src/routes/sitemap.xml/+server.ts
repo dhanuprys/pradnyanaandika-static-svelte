@@ -1,21 +1,24 @@
 import { getAllPosts } from '$lib/data/blogs/index';
+import { getAllProducts } from '$lib/data/products/index';
+import { SITE_CONFIG } from '$lib/config/site';
 
 export const prerender = true;
 
-const SITE_URL = 'https://pradnya.com'; // TODO: Update with your actual domain
+const SITE_URL = SITE_CONFIG.url;
 
 /** Known static routes to include in the sitemap */
 const STATIC_ROUTES = ['/', '/about', '/blogs', '/contact', '/portofolio', '/store'];
 
 export async function GET() {
 	const posts = await getAllPosts();
+	const products = await getAllProducts();
 
 	const staticUrls = STATIC_ROUTES.map(
 		(route) => `
 	<url>
 		<loc>${SITE_URL}${route}</loc>
 		<changefreq>${route === '/' ? 'weekly' : 'monthly'}</changefreq>
-		<priority>${route === '/' ? '1.0' : '0.7'}</priority>
+		<priority>${route === '/' ? '1.0' : '0.8'}</priority>
 	</url>`
 	).join('');
 
@@ -31,6 +34,17 @@ export async function GET() {
 		)
 		.join('');
 
+	const productUrls = products
+		.map(
+			(product) => `
+	<url>
+		<loc>${SITE_URL}/store/${product.id}</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.7</priority>
+	</url>`
+		)
+		.join('');
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8" ?>
 <urlset
 	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -40,6 +54,7 @@ export async function GET() {
 >
 	${staticUrls}
 	${postUrls}
+	${productUrls}
 </urlset>`;
 
 	return new Response(sitemap.trim(), {

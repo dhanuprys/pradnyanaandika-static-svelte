@@ -18,6 +18,9 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG, getPersonSchema } from '$lib/config/site';
+
 	const tabs = [
 		{ id: 'profil', label: 'Profil', icon: User },
 		{ id: 'pendidikan', label: 'Pendidikan', icon: GraduationCap },
@@ -29,11 +32,24 @@
 	];
 
 	let activeTab = $state('profil');
+
+	const profileSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'ProfilePage',
+		'@id': `${SITE_CONFIG.url}/about`,
+		name: 'Profil & Biografi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd.',
+		url: `${SITE_CONFIG.url}/about`,
+		mainEntity: getPersonSchema()
+	};
 </script>
 
-<svelte:head>
-	<title>Tentang Saya - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="Profil Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. | Andika Academy"
+	description="Biografi lengkap, riwayat pendidikan, publikasi ilmiah Scopus, sertifikasi, & prestasi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. Pakar Teknopedagogi & AI Education."
+	canonical="{SITE_CONFIG.url}/about"
+	type="profile"
+	jsonLd={profileSchema}
+/>
 
 <div class="bg-slate-50/50 pb-8 text-slate-800">
 	<!-- Hero Section -->

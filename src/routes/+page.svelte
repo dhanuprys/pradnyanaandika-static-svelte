@@ -18,14 +18,18 @@
 	import PortfolioCard from '$lib/components/ui/PortfolioCard.svelte';
 	import ProductCard from '$lib/components/ui/ProductCard.svelte';
 	import ArticleCard from '$lib/components/ui/ArticleCard.svelte';
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-	<title>Andika Academy - Home</title>
-</svelte:head>
+<SEO
+	title="Dr. I Ketut Andika Pradnyana | Andika Academy - AI Education, VR & Scopus"
+	description="Situs resmi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. & Andika Academy. Center of Excellence dalam AI Education, VR Learning, Publikasi Jurnal Scopus, & Metodologi Penelitian."
+	canonical="{SITE_CONFIG.url}/"
+/>
 
 <!-- Hero Section -->
 <section class="relative overflow-hidden bg-primary-950 pt-16 pb-16 lg:pt-24 lg:pb-0">

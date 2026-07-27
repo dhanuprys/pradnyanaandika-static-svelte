@@ -20,6 +20,9 @@
 	import PortfolioCard from '$lib/components/ui/PortfolioCard.svelte';
 	import CtaBanner from '$lib/components/ui/CtaBanner.svelte';
 
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
+
 	const categories = [
 		{ id: 'all', label: 'Semua', icon: LayoutGrid },
 		{ id: 'penelitian', label: 'Penelitian', icon: FlaskConical },
@@ -33,9 +36,11 @@
 	let activeCategory = $state('all');
 </script>
 
-<svelte:head>
-	<title>Portofolio - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="Portofolio Penelitian & Publikasi | Dr. I Ketut Andika Pradnyana"
+	description="Portofolio karya ilmiah, publikasi Scopus, Hak Kekayaan Intelektual (HKI), hibah penelitian, & karya inovasi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd."
+	canonical="{SITE_CONFIG.url}/portofolio"
+/>
 
 <!-- Portfolio Hero -->
 <section class="relative overflow-hidden bg-gradient-to-r from-slate-50 via-slate-100 via-50% to-primary-950 pt-6 pb-12 lg:pt-8 lg:pb-0">

@@ -18,6 +18,8 @@
 		FileCode
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
 	import ProductCard from '$lib/components/ui/ProductCard.svelte';
 	import type { PageData } from './$types';
 
@@ -77,9 +79,11 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Academy Store - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="Academy Store - Modul, E-Book & Tools | Dr. I Ketut Andika Pradnyana"
+	description="Toko resmi Andika Academy oleh Dr. I Ketut Andika Pradnyana. Modul pelatihan AI, e-book metodologi penelitian, template data analisis, & instrumen publikasi Scopus."
+	canonical="{SITE_CONFIG.url}/store"
+/>
 
 <div class="bg-slate-50/50 py-8 text-slate-800">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

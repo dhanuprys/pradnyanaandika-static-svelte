@@ -12,6 +12,9 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
+	import SEO from '$lib/components/seo/SEO.svelte';
+	import { SITE_CONFIG } from '$lib/config/site';
+
 	let { data } = $props();
 
 	const Content: Component = $derived(data.content);
@@ -25,11 +28,50 @@
 			setTimeout(() => (copied = false), 2000);
 		}
 	}
+
+	const articleSchema = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		'@id': `${SITE_CONFIG.url}/blogs/${data.slug}#article`,
+		headline: data.metadata?.title,
+		description: data.metadata?.description,
+		datePublished: data.metadata?.date,
+		dateModified: data.metadata?.updated ?? data.metadata?.date,
+		image: data.image || data.metadata?.ogImage || SITE_CONFIG.defaultOgImage,
+		author: {
+			'@type': 'Person',
+			name: SITE_CONFIG.author.name,
+			url: `${SITE_CONFIG.url}/about`
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: SITE_CONFIG.name,
+			url: SITE_CONFIG.url,
+			logo: {
+				'@type': 'ImageObject',
+				url: SITE_CONFIG.publisher.logo
+			}
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': `${SITE_CONFIG.url}/blogs/${data.slug}`
+		}
+	});
 </script>
 
-<svelte:head>
-	<title>{data.metadata?.title || 'Artikel'} - Andika Academy</title>
-</svelte:head>
+<SEO
+	title="{data.metadata?.title || 'Artikel'} | Dr. I Ketut Andika Pradnyana"
+	description={data.metadata?.description || SITE_CONFIG.description}
+	canonical="{SITE_CONFIG.url}/blogs/{data.slug}"
+	type="article"
+	image={data.image || data.metadata?.ogImage || SITE_CONFIG.defaultOgImage}
+	publishedTime={data.metadata?.date}
+	modifiedTime={data.metadata?.updated}
+	keywords={data.metadata?.tags
+		? [...SITE_CONFIG.keywords, ...data.metadata.tags]
+		: SITE_CONFIG.keywords}
+	jsonLd={articleSchema}
+/>
 
 <div class="bg-slate-50/50 pb-16 text-slate-800">
 	<!-- Top Hero Header (Standard max-w-7xl container width) -->

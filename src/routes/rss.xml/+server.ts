@@ -1,8 +1,9 @@
 import { getAllPosts } from '$lib/data/blogs/index';
+import { SITE_CONFIG } from '$lib/config/site';
 
 export const prerender = true;
 
-const SITE_URL = 'https://pradnya.com'; // TODO: Update with your actual domain
+const SITE_URL = SITE_CONFIG.url;
 
 export async function GET() {
 	const posts = await getAllPosts();
@@ -16,7 +17,7 @@ export async function GET() {
 			<link>${SITE_URL}/blogs/${post.slug}</link>
 			<guid isPermaLink="true">${SITE_URL}/blogs/${post.slug}</guid>
 			<pubDate>${new Date(post.metadata.date).toUTCString()}</pubDate>
-			<author>${post.metadata.author}</author>
+			<author>${SITE_CONFIG.author.name}</author>
 			${post.metadata.tags.map((tag) => `<category>${tag}</category>`).join('\n\t\t\t')}
 		</item>`
 		)
@@ -25,11 +26,11 @@ export async function GET() {
 	const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Pradnya Blog</title>
-		<description>Blog posts from Pradnya</description>
+		<title>Blog & Artikel - Dr. I Ketut Andika Pradnyana</title>
+		<description>Edukasi AI, VR Learning, Metodologi Penelitian, & Publikasi Scopus oleh Dr. I Ketut Andika Pradnyana</description>
 		<link>${SITE_URL}/blogs</link>
 		<atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
-		<language>en</language>
+		<language>id</language>
 		<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 		${items}
 	</channel>
