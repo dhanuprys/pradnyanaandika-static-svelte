@@ -4,10 +4,11 @@
 
 	const { data }: { data: PageData } = $props();
 	const product = $derived(data.product);
+	const relatedProducts = $derived(data.relatedProducts);
 </script>
 
 <svelte:head>
-	<title>{product.name} | Store | Pradnya</title>
+	<title>{product.name} | Store | Andika Academy</title>
 	<meta name="description" content={product.shortDescription} />
 	<meta property="og:title" content={product.name} />
 	<meta property="og:description" content={product.shortDescription} />
@@ -18,4 +19,4 @@
 	<meta property="product:price:currency" content={product.currency} />
 </svelte:head>
 
-<ProductDetail {product} />
+<ProductDetail {product} {relatedProducts} />

@@ -1,8 +1,10 @@
 ---
 title: 5 Kesalahan Umum Mahasiswa Saat Menulis Skripsi
 description: Hindari 5 jebakan umum ini agar proses pengerjaan skripsi Anda menjadi lebih lancar dan terhindar dari revisi besar.
+category: publikasi-scopus
 date: '2026-07-23'
-author: Andika Academy
+author: Dr. I Ketut Andika
+relatedProductIds: ['webinar-scopus']
 tags: ['skripsi', 'tips', 'academic-writing']
 ---
 

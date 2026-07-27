@@ -28,7 +28,7 @@
 </svelte:head>
 
 <!-- Hero Section -->
-<section class="relative overflow-hidden bg-primary-950 pt-16 pb-32 lg:pt-24 lg:pb-48">
+<section class="relative overflow-hidden bg-primary-950 pt-16 pb-16 lg:pt-24 lg:pb-0">
 	<!-- Background graphic -->
 	<div
 		class="absolute inset-0 z-0 opacity-20"
@@ -39,15 +39,25 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="grid items-center gap-12 lg:grid-cols-2">
-			<div>
+		<div class="flex flex-col items-center gap-4 lg:flex-row lg:items-end lg:gap-20">
+			<!-- Persona Image (Left side, fitted to background bottom) -->
+			<div class="flex w-full shrink-0 items-end justify-center lg:w-auto lg:justify-start">
+				<img
+					src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+					alt="Dr. I Ketut Andika"
+					class="h-auto max-h-[480px] w-auto object-contain object-bottom drop-shadow-2xl lg:max-h-[620px]"
+				/>
+			</div>
+
+			<!-- Text Content (Right side, full width flex-1) -->
+			<div class="w-full flex-1 lg:pb-26">
 				<h1 class="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
 					Dr. I Ketut Andika Pradnyana, <br />S.Pd., M.Pd.
 				</h1>
 				<p class="mb-6 text-lg font-medium text-primary-200">
 					Educational Technology Researcher | AI & VR Learning Innovator
 				</p>
-				<p class="mb-8 max-w-xl text-base text-gray-300">
+				<p class="mb-8 text-base text-gray-300">
 					Dosen, peneliti, dan inovator di bidang teknologi pendidikan yang berfokus pada
 					pengembangan Artificial Intelligence, Virtual Reality, dan media pembelajaran inovatif
 					untuk transformasi pendidikan.
@@ -80,15 +90,6 @@
 						<span class="rounded bg-teal-500 px-1 text-xs font-bold text-white">R&supE;</span> ResearchGate
 					</div>
 				</div>
-			</div>
-			<!-- Right Image Container Placeholder -->
-			<div class="relative hidden h-full min-h-100 lg:block">
-				<!-- Placeholder for persona image. We will leave space or put a placeholder -->
-				<img
-					src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-					alt="Dr. I Ketut Andika"
-					class="absolute right-0 bottom-0 h-auto w-[90%] max-w-lg rounded-t-full object-contain object-bottom drop-shadow-2xl"
-				/>
 			</div>
 		</div>
 	</div>

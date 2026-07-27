@@ -1,8 +1,10 @@
 ---
 title: Cara Ampuh Menemukan Research Gap dalam Kajian Literatur
 description: Pelajari teknik sistematis untuk menemukan celah penelitian yang belum banyak dibahas oleh peneliti lain.
+category: metodologi
 date: '2026-07-21'
-author: Andika Academy
+author: Dr. I Ketut Andika
+relatedProductIds: ['modul-kualitatif', 'template-skripsi']
 tags: ['literatur', 'research-gap', 'metodologi']
 ---
 

@@ -1,8 +1,11 @@
 ---
 title: Panduan Memilih Uji Statistik yang Tepat untuk Penelitian
 description: Bingung menentukan antara Uji-T, ANOVA, Regresi, atau Chi-Square? Panduan ini akan menyederhanakan cara memilih uji statistik.
+category: analisis-data
 date: '2026-07-22'
-author: Andika Academy
+author: Dr. I Ketut Andika
+isFeatured: true
+relatedProductIds: ['video-course-spss']
 tags: ['statistik', 'kuantitatif', 'spss']
 ---
 
