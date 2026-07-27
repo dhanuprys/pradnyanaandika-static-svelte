@@ -19,6 +19,8 @@
 
 	let selectedCategory = $state('all');
 	let searchQuery = $state('');
+	let currentPage = $state(1);
+	const ITEMS_PER_PAGE = 6;
 
 	let filteredPosts = $derived(
 		data.posts.filter((post) => {
@@ -47,6 +49,37 @@
 		if (!featuredPost) return filteredPosts;
 		return filteredPosts.filter((p) => p.slug !== featuredPost.slug);
 	});
+
+	let postsToPaginate = $derived.by(() => {
+		return featuredPost && regularPosts.length > 0 ? regularPosts : filteredPosts;
+	});
+
+	let totalPages = $derived.by(() => {
+		return Math.max(1, Math.ceil(postsToPaginate.length / ITEMS_PER_PAGE));
+	});
+
+	let displayedPosts = $derived.by(() => {
+		const start = (currentPage - 1) * ITEMS_PER_PAGE;
+		return postsToPaginate.slice(start, start + ITEMS_PER_PAGE);
+	});
+
+	function selectCategory(catId: string) {
+		selectedCategory = catId;
+		currentPage = 1;
+	}
+
+	function handleSearchInput() {
+		currentPage = 1;
+	}
+
+	function goToPage(p: number) {
+		if (p >= 1 && p <= totalPages) {
+			currentPage = p;
+			if (typeof window !== 'undefined') {
+				window.scrollTo({ top: 400, behavior: 'smooth' });
+			}
+		}
+	}
 </script>
 
 <SEO
@@ -78,10 +111,11 @@
 					<input
 						type="text"
 						bind:value={searchQuery}
+						oninput={handleSearchInput}
 						placeholder="Cari topik atau judul artikel..."
-						class="w-full rounded-2xl border border-white/20 bg-white/10 py-3.5 pl-5 pr-12 text-sm text-white placeholder-slate-400 backdrop-blur-md shadow-xl focus:border-blue-400 focus:outline-none"
+						class="w-full rounded-2xl border border-white/20 bg-white/10 py-3.5 pr-12 pl-5 text-base text-white placeholder-slate-400 shadow-xl backdrop-blur-md focus:border-blue-400 focus:outline-none sm:text-sm"
 					/>
-					<Search class="absolute right-4 top-3.5 h-5 w-5 text-slate-300" />
+					<Search class="absolute top-3.5 right-4 h-5 w-5 text-slate-300" />
 				</div>
 			</div>
 		</div>
@@ -90,14 +124,16 @@
 	<!-- Category Filter Bar -->
 	<section class="py-8">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<div class="no-scrollbar flex items-center gap-2 overflow-x-auto border-b border-gray-200 pb-4">
+			<div
+				class="no-scrollbar flex snap-x items-center gap-2 overflow-x-auto border-b border-gray-200 pb-4 whitespace-nowrap"
+			>
 				{#each categories as category (category.id)}
 					<button
-						onclick={() => (selectedCategory = category.id)}
-						class="rounded-xl px-4 py-2.5 text-xs sm:text-sm font-bold whitespace-nowrap transition-all
+						onclick={() => selectCategory(category.id)}
+						class="flex min-h-[44px] shrink-0 snap-start items-center justify-center rounded-xl px-4 py-2.5 text-xs font-bold whitespace-nowrap transition-all sm:text-sm
 						{selectedCategory === category.id
 							? 'bg-blue-600 text-white shadow-xs'
-							: 'bg-white text-slate-600 border border-gray-200 hover:bg-slate-50'}"
+							: 'border border-gray-200 bg-white text-slate-600 hover:bg-slate-50'}"
 					>
 						{category.label}
 					</button>
@@ -110,16 +146,21 @@
 		<!-- Featured Post (Compact height card) -->
 		{#if featuredPost}
 			<section class="mb-12">
-				<div class="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xs transition-all hover:shadow-md">
-					<div class="flex flex-col lg:flex-row items-stretch">
+				<div
+					class="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xs transition-all hover:shadow-md"
+				>
+					<div class="flex flex-col items-stretch lg:flex-row">
 						<!-- Image with controlled height -->
-						<div class="relative w-full lg:w-1/2 shrink-0 aspect-[16/9] lg:aspect-auto">
+						<div class="relative aspect-[16/9] w-full shrink-0 lg:aspect-auto lg:w-1/2">
 							<img
-								src={featuredPost.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+								src={featuredPost.image ||
+									'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
 								alt={featuredPost.metadata.title}
-								class="h-full w-full max-h-[300px] lg:max-h-[340px] object-cover transition-transform duration-500 group-hover:scale-105"
+								class="h-full max-h-[300px] w-full object-cover transition-transform duration-500 group-hover:scale-105 lg:max-h-[340px]"
 							/>
-							<span class="absolute top-3 left-3 rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs">
+							<span
+								class="absolute top-3 left-3 rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-bold text-white shadow-xs"
+							>
 								ARTIKEL TERBARU
 							</span>
 						</div>
@@ -128,29 +169,42 @@
 						<div class="flex flex-1 flex-col justify-between p-6 lg:p-7">
 							<div>
 								<div class="mb-2 flex items-center gap-3 text-xs text-slate-500">
-									<span class="font-bold text-blue-600">{featuredPost.metadata.tags?.[0] || 'Edukasi'}</span>
+									<span class="font-bold text-blue-600"
+										>{featuredPost.metadata.tags?.[0] || 'Edukasi'}</span
+									>
 									<span>•</span>
 									<span class="flex items-center gap-1">
 										<Clock class="h-3.5 w-3.5" /> 5 min baca
 									</span>
 									<span>•</span>
-									<span>{new Date(featuredPost.metadata.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+									<span
+										>{new Date(featuredPost.metadata.date).toLocaleDateString('id-ID', {
+											day: 'numeric',
+											month: 'short',
+											year: 'numeric'
+										})}</span
+									>
 								</div>
 
-								<h2 class="mb-3 text-xl font-bold leading-snug text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl">
+								<h2
+									class="mb-3 text-xl leading-snug font-bold text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl"
+								>
 									<a href={resolve(`/blogs/${featuredPost.slug}`)}>
 										{featuredPost.metadata.title}
 									</a>
 								</h2>
 
-								<p class="mb-4 text-xs leading-relaxed text-slate-600 sm:text-sm line-clamp-3">
-									{featuredPost.metadata.description || 'Simak ulasan mendalam mengenai perkembangan teknologi terbaru serta implementasi praktisnya untuk efektivitas pembelajaran.'}
+								<p class="mb-4 line-clamp-3 text-xs leading-relaxed text-slate-600 sm:text-sm">
+									{featuredPost.metadata.description ||
+										'Simak ulasan mendalam mengenai perkembangan teknologi terbaru serta implementasi praktisnya untuk efektivitas pembelajaran.'}
 								</p>
 							</div>
 
-							<div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+							<div class="flex items-center justify-between border-t border-gray-100 pt-3">
 								<div class="flex items-center gap-2">
-									<div class="h-7 w-7 rounded-full bg-blue-100 flex items-center justify-center font-bold text-[11px] text-blue-700">
+									<div
+										class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-[11px] font-bold text-blue-700"
+									>
 										DA
 									</div>
 									<span class="text-xs font-bold text-slate-800">Dr. Andika</span>
@@ -160,7 +214,9 @@
 									href={resolve(`/blogs/${featuredPost.slug}`)}
 									class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-700"
 								>
-									Baca Artikel <ArrowRight class="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+									Baca Artikel <ArrowRight
+										class="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-1"
+									/>
 								</a>
 							</div>
 						</div>
@@ -174,16 +230,21 @@
 			<h2 class="mb-6 text-xl font-bold text-slate-900">Artikel Lainnya</h2>
 
 			{#if filteredPosts.length === 0}
-				<div class="rounded-2xl border border-gray-100 bg-white py-16 text-center text-slate-500 shadow-xs">
+				<div
+					class="rounded-2xl border border-gray-100 bg-white py-16 text-center text-slate-500 shadow-xs"
+				>
 					<BookOpen class="mx-auto mb-3 h-10 w-10 text-slate-300" />
 					<p class="text-base font-semibold text-slate-700">Belum ada artikel yang sesuai.</p>
-					<p class="text-xs text-slate-400 mt-1">Coba gunakan kata kunci pencarian atau kategori lain.</p>
+					<p class="mt-1 text-xs text-slate-400">
+						Coba gunakan kata kunci pencarian atau kategori lain.
+					</p>
 				</div>
 			{:else}
 				<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{#each (featuredPost && regularPosts.length > 0 ? regularPosts : filteredPosts) as post (post.slug)}
+					{#each displayedPosts as post (post.slug)}
 						<ArticleCard
-							image={post.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+							image={post.image ||
+								'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
 							category={post.metadata.tags?.[0] || 'Edukasi'}
 							date={new Date(post.metadata.date).toLocaleDateString('id-ID', {
 								day: 'numeric',
@@ -199,40 +260,57 @@
 		</section>
 
 		<!-- Pagination Bar -->
-		<section class="mb-12 flex justify-center">
-			<nav class="flex items-center gap-2">
-				<button
-					class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-500 shadow-xs hover:bg-slate-50 disabled:opacity-40"
-					disabled
-				>
-					Sebelumnya
-				</button>
-				<button class="rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md">
-					1
-				</button>
-				<button class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50">
-					2
-				</button>
-				<button class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50">
-					3
-				</button>
-				<button class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50">
-					Selanjutnya
-				</button>
-			</nav>
-		</section>
+		{#if totalPages > 1}
+			<section class="mb-12 flex justify-center">
+				<nav class="flex items-center gap-2">
+					<button
+						onclick={() => goToPage(currentPage - 1)}
+						disabled={currentPage === 1}
+						class="flex min-h-[44px] items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs transition-colors hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white"
+					>
+						Sebelumnya
+					</button>
+
+					{#each Array.from({ length: totalPages }, (_, i) => i + 1) as pageNum (pageNum)}
+						<button
+							onclick={() => goToPage(pageNum)}
+							class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl px-4 py-2 text-xs font-bold transition-all
+							{currentPage === pageNum
+								? 'bg-blue-600 text-white shadow-md'
+								: 'border border-gray-200 bg-white text-slate-700 hover:bg-slate-50'}"
+						>
+							{pageNum}
+						</button>
+					{/each}
+
+					<button
+						onclick={() => goToPage(currentPage + 1)}
+						disabled={currentPage === totalPages}
+						class="flex min-h-[44px] items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs transition-colors hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white"
+					>
+						Selanjutnya
+					</button>
+				</nav>
+			</section>
+		{/if}
 
 		<!-- CTA Banner -->
 		<section>
-			<div class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-600 p-6 text-white shadow-md sm:flex-row sm:p-8">
+			<div
+				class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-600 p-6 text-white shadow-md sm:flex-row sm:p-8"
+			>
 				<div>
-					<h3 class="text-lg font-bold text-white sm:text-xl mb-1">Punya topik menarik untuk dibahas?</h3>
-					<p class="text-xs text-blue-100 sm:text-sm">Kirimkan ide atau tulisan Anda untuk dipublikasikan di blog kami.</p>
+					<h3 class="mb-1 text-lg font-bold text-white sm:text-xl">
+						Punya topik menarik untuk dibahas?
+					</h3>
+					<p class="text-xs text-blue-100 sm:text-sm">
+						Kirimkan ide atau tulisan Anda untuk dipublikasikan di blog kami.
+					</p>
 				</div>
 
 				<a
 					href={resolve('/contact')}
-					class="flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-xs font-bold text-blue-600 shadow-xs hover:bg-blue-50 transition-colors sm:text-sm"
+					class="flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-xs font-bold text-blue-600 shadow-xs transition-colors hover:bg-blue-50 sm:text-sm"
 				>
 					Kirim Tulisan <Send class="h-4 w-4" />
 				</a>

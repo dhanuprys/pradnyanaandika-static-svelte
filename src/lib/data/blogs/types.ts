@@ -1,11 +1,7 @@
 import type { Component } from 'svelte';
 
 export type BlogCategory =
-	| 'ai-education'
-	| 'vr-learning'
-	| 'metodologi'
-	| 'publikasi-scopus'
-	| 'analisis-data';
+	'ai-education' | 'vr-learning' | 'metodologi' | 'publikasi-scopus' | 'analisis-data';
 
 export interface AuthorProfile {
 	name: string;

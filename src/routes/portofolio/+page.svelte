@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {
 		ArrowRight,
-		Download,
 		BookOpen,
 		FlaskConical,
 		ShieldCheck,
@@ -13,15 +12,27 @@
 		FileText,
 		GraduationCap,
 		Cpu,
-		BarChart3
+		BarChart3,
+		ShoppingBag,
+		Sparkles
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
-	import Button from '$lib/components/ui/Button.svelte';
-	import PortfolioCard from '$lib/components/ui/PortfolioCard.svelte';
-	import CtaBanner from '$lib/components/ui/CtaBanner.svelte';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
 	import { SITE_CONFIG } from '$lib/config/site';
+
+	import { getAllResearch, getResearchSchema } from '$lib/data/research';
+	import { getAllPublications, getPublicationSchema } from '$lib/data/publications';
+	import { getAllHki, getHkiSchema } from '$lib/data/hki';
+	import { getAllPengabdian, getPengabdianSchema } from '$lib/data/pengabdian';
+	import { getAllInovasi, getInovasiSchema } from '$lib/data/inovasi';
+
+	import PortfolioCard from '$lib/components/ui/PortfolioCard.svelte';
+	import PublicationCard from '$lib/components/ui/PublicationCard.svelte';
+	import HkiCard from '$lib/components/ui/HkiCard.svelte';
+	import PengabdianCard from '$lib/components/ui/PengabdianCard.svelte';
+	import InovasiCard from '$lib/components/ui/InovasiCard.svelte';
+	import CtaBanner from '$lib/components/ui/CtaBanner.svelte';
 
 	const categories = [
 		{ id: 'all', label: 'Semua', icon: LayoutGrid },
@@ -34,238 +45,422 @@
 	];
 
 	let activeCategory = $state('all');
+
+	const researchList = getAllResearch();
+	const publicationList = getAllPublications();
+	const hkiList = getAllHki();
+	const pengabdianList = getAllPengabdian();
+	const inovasiList = getAllInovasi();
+
+	let researchSchemas = $derived(researchList.map((item) => getResearchSchema(item)));
+	let publicationSchemas = $derived(publicationList.map((pub) => getPublicationSchema(pub)));
+	let hkiSchemas = $derived(hkiList.map((record) => getHkiSchema(record)));
+	let pengabdianSchemas = $derived(pengabdianList.map((prog) => getPengabdianSchema(prog)));
+	let inovasiSchemas = $derived(inovasiList.map((ino) => getInovasiSchema(ino)));
+
+	let pageSchemas = $derived([
+		...researchSchemas,
+		...publicationSchemas,
+		...hkiSchemas,
+		...pengabdianSchemas,
+		...inovasiSchemas
+	]);
 </script>
 
 <SEO
-	title="Portofolio Penelitian & Publikasi | Dr. I Ketut Andika Pradnyana"
-	description="Portofolio karya ilmiah, publikasi Scopus, Hak Kekayaan Intelektual (HKI), hibah penelitian, & karya inovasi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd."
+	title="Portofolio Karya & Inovasi | Dr. I Ketut Andika Pradnyana"
+	description="Portofolio lengkap karya penelitian, publikasi Scopus, HKI, pengabdian masyarakat, & inovasi AI/VR Dr. I Ketut Andika Pradnyana."
 	canonical="{SITE_CONFIG.url}/portofolio"
+	jsonLd={pageSchemas}
 />
 
 <!-- Portfolio Hero -->
-<section class="relative overflow-hidden bg-gradient-to-r from-slate-50 via-slate-100 via-50% to-primary-950 pt-6 pb-12 lg:pt-8 lg:pb-0">
+<section
+	class="relative overflow-hidden bg-gradient-to-r from-slate-50 via-slate-100 via-50% to-primary-950 pt-6 pb-12 lg:pt-8 lg:pb-0"
+>
 	<!-- Tech icons floating in deep blue background on the right -->
-	<div class="pointer-events-none absolute right-0 top-0 bottom-0 hidden w-1/2 overflow-hidden lg:block">
-		<div class="absolute right-[30%] top-8 opacity-15 text-blue-200">
+	<div
+		class="pointer-events-none absolute top-0 right-0 bottom-0 hidden w-1/2 overflow-hidden lg:block"
+	>
+		<div class="absolute top-8 right-[30%] text-blue-200 opacity-15">
 			<GraduationCap class="h-16 w-16" />
 		</div>
-		<div class="absolute right-[10%] top-6 opacity-15 text-blue-200">
+		<div class="absolute top-6 right-[10%] text-blue-200 opacity-15">
 			<Cpu class="h-14 w-14" />
 		</div>
-		<div class="absolute right-[35%] bottom-16 opacity-15 text-blue-200">
+		<div class="absolute right-[35%] bottom-16 text-blue-200 opacity-15">
 			<BarChart3 class="h-14 w-14" />
 		</div>
-		<div class="absolute right-[8%] bottom-10 opacity-15 text-blue-200">
+		<div class="absolute right-[8%] bottom-10 text-blue-200 opacity-15">
 			<BookOpen class="h-16 w-16" />
 		</div>
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+		<div
+			class="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12"
+		>
 			<!-- Text Content (Left Side) -->
 			<div class="w-full pt-4 pb-16 lg:w-1/2 lg:pt-8 lg:pb-28">
 				<!-- Breadcrumb -->
-				<nav class="mb-3 flex items-center gap-2 text-xs font-medium text-slate-500 sm:text-sm">
-					<a href={resolve('/')} class="transition-colors hover:text-slate-900">Home</a>
-					<span class="text-slate-400">&gt;</span>
-					<span class="font-bold text-slate-900">Portofolio</span>
+				<nav
+					class="mb-6 flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-500 uppercase"
+				>
+					<a href={resolve('/')} class="transition-colors hover:text-blue-600">Home</a>
+					<span>/</span>
+					<span class="text-blue-600">Portofolio Akademik</span>
 				</nav>
 
-				<h1 class="mb-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-					PORTOFOLIO
+				<h1
+					class="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl"
+				>
+					Portofolio Penelitian, Publikasi & Karya Inovasi
 				</h1>
-				<p class="mb-6 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
-					Kumpulan karya akademik, penelitian, inovasi, dan pengabdian yang telah saya lakukan untuk
-					mendorong kemajuan pendidikan melalui teknologi.
+				<p class="mb-8 text-sm leading-relaxed text-slate-600 sm:text-base">
+					Rekam jejak kontribusi akademik, hibah penelitian terapan, hak kekayaan intelektual (HKI),
+					dan produk inovasi teknopedagogi Dr. I Ketut Andika Pradnyana.
 				</p>
-				<div>
-					<Button variant="primary" size="md" href="#" class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md font-semibold px-5 py-2.5">
-						Ringkasan Portofolio <Download class="ml-2 h-4 w-4" />
-					</Button>
-				</div>
 			</div>
 
-			<!-- Persona Image (Right Side, fitted to bottom) -->
-			<div class="flex w-full items-end justify-center lg:w-1/2 lg:justify-end">
-				<img
-					src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-					alt="Dr. I Ketut Andika"
-					class="h-auto max-h-[300px] w-auto object-contain object-bottom drop-shadow-xl sm:max-h-[360px] lg:max-h-[420px]"
-				/>
+			<!-- Image Showcase (Right Side) -->
+			<div class="relative flex w-full justify-center lg:w-1/2 lg:justify-end">
+				<div
+					class="relative h-[340px] w-full max-w-[340px] sm:h-[460px] sm:max-w-[440px] lg:h-[480px]"
+				>
+					<div
+						class="absolute inset-0 rounded-t-3xl bg-gradient-to-t from-primary-950 via-primary-900 to-blue-900 shadow-2xl"
+					></div>
+					<img
+						src={resolve('/images/andika.png')}
+						alt="Dr. I Ketut Andika Pradnyana"
+						class="absolute bottom-0 left-1/2 h-full max-h-[340px] w-auto -translate-x-1/2 object-contain drop-shadow-2xl sm:max-h-[460px] lg:max-h-[480px]"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- Stats Bar / Category Tabs Bar -->
+<!-- Category Tabs Bar -->
 <section class="relative z-20 mx-auto -mt-12 mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
 	<div
-		class="no-scrollbar flex items-center justify-between gap-2 overflow-x-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-md"
+		class="no-scrollbar flex snap-x items-center gap-2 overflow-x-auto rounded-2xl border border-gray-100 bg-white p-2 whitespace-nowrap shadow-md"
 	>
 		{#each categories as category (category.id)}
 			<button
 				onclick={() => (activeCategory = category.id)}
-				class="relative flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all
+				class="relative flex min-h-[44px] shrink-0 snap-start items-center justify-center gap-2 rounded-xl px-4 py-3 text-xs font-semibold whitespace-nowrap transition-all sm:text-sm
 				{activeCategory === category.id
-					? 'bg-slate-50 text-blue-600'
+					? 'bg-blue-50 font-bold text-blue-600'
 					: 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}"
 			>
-				<category.icon class="h-4 w-4 shrink-0 {activeCategory === category.id ? 'text-blue-600' : 'text-slate-500'}" />
+				<category.icon
+					class="h-4 w-4 shrink-0 {activeCategory === category.id
+						? 'text-blue-600'
+						: 'text-slate-500'}"
+				/>
 				<span>{category.label}</span>
 				{#if activeCategory === category.id}
-					<span class="absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-blue-600"></span>
+					<span class="absolute right-4 bottom-0 left-4 h-0.5 rounded-full bg-blue-600"></span>
 				{/if}
 			</button>
 		{/each}
 	</div>
 </section>
 
-<!-- Metrics Summary Cards Section -->
-<section class="mb-12">
+<!-- Quick Stats Counter -->
+<section class="py-4 mb-8">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
-			<!-- Penelitian -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<FlaskConical class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">28+</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">Penelitian</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{researchList.length}+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Penelitian</span>
 				</div>
 			</div>
 
-			<!-- Publikasi -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<FileText class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">35+</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">Publikasi</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{publicationList.length}+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Publikasi</span>
 				</div>
 			</div>
 
-			<!-- HKI & Paten -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<ShieldCheck class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">15+</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">HKI & Paten</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{hkiList.length}+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">HKI & Paten</span>
 				</div>
 			</div>
 
-			<!-- Buku -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<Library class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">6</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">Buku</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">5+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Buku & Modul</span>
 				</div>
 			</div>
 
-			<!-- Pengabdian -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<Users class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">20+</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">Pengabdian</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{pengabdianList.length}+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Pengabdian</span>
 				</div>
 			</div>
 
-			<!-- Inovasi -->
-			<div class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 sm:p-5 shadow-xs transition-shadow hover:shadow-md">
-				<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14">
+			<div
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-shadow hover:shadow-md sm:p-5"
+			>
+				<div
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm sm:h-14 sm:w-14"
+				>
 					<Lightbulb class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">12+</span>
-					<span class="text-xs font-medium text-slate-500 sm:text-sm whitespace-nowrap">Inovasi</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{inovasiList.length}+</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Inovasi</span>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- Penelitian Section -->
-<section class="py-12">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
-			<h2 class="text-2xl font-bold text-slate-900">Penelitian</h2>
-			<a
-				href="#"
-				class="flex items-center text-sm font-semibold text-primary-600 hover:text-primary-700"
-			>
-				Lihat Semua Penelitian <ArrowRight class="ml-1 h-4 w-4" />
-			</a>
-		</div>
-		<div class="grid gap-8 md:grid-cols-3">
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="Penelitian Terapan"
-				title="Pengembangan KodiBot AI sebagai Asisten Cerdas untuk Pembelajaran Adaptif"
-				description="Pendanaan: Kemendikbudristek (2024)"
-			/>
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="Penelitian Terapan"
-				title="Pengembangan Media Pembelajaran Biologi Berbasis Virtual Reality"
-				description="Pendanaan: DRTPM (2023)"
-			/>
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="Penelitian Dasar"
-				title="Model Pembelajaran Adaptif Berbasis Learning Analytics untuk Meningkatkan Hasil Belajar"
-				description="Pendanaan: Internal (2022)"
-			/>
-		</div>
-	</div>
-</section>
-
-<!-- Publikasi Terbaru Section -->
-<section class="bg-slate-50 py-12">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
-			<h2 class="text-2xl font-bold text-slate-900">Publikasi Terbaru</h2>
-			<a
-				href="#"
-				class="flex items-center text-sm font-semibold text-primary-600 hover:text-primary-700"
-			>
-				Lihat Semua Publikasi <ArrowRight class="ml-1 h-4 w-4" />
-			</a>
-		</div>
-		<div class="grid gap-6 md:grid-cols-3">
-			<!-- Simulating simple publication cards since we don't have a specific component for it, we'll build it inline -->
-			{#each [0, 1, 2] as idx (idx)}
-				<div
-					class="flex flex-col rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+<!-- 1. Penelitian Section -->
+{#if activeCategory === 'all' || activeCategory === 'penelitian'}
+	<section class="py-12">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
+				<div>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Penelitian & Proyek</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Menampilkan {researchList.length} karya penelitian & hibah terapan
+					</p>
+				</div>
+				<a
+					href={resolve('/contact')}
+					class="hidden items-center text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex"
 				>
-					<div class="mb-4 flex items-start gap-4">
-						<div class="h-24 w-16 shrink-0 rounded bg-primary-100"></div>
+					Ajukan Kolaborasi <ArrowRight class="ml-1 h-4 w-4" />
+				</a>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-3">
+				{#each researchList as item (item.id)}
+					<PortfolioCard
+						image={item.image}
+						category={item.categoryLabel}
+						title={item.title}
+						description={`${item.funding} — ${item.description}`}
+						href={item.targetUrl || resolve('/contact')}
+					/>
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
+
+<!-- 2. Publikasi Section -->
+{#if activeCategory === 'all' || activeCategory === 'publikasi'}
+	<section class="bg-slate-50 py-12">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
+				<div>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Publikasi Jurnal & Scopus</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Menampilkan {publicationList.length} artikel terindeks Scopus & Sinta
+					</p>
+				</div>
+				<a
+					href="https://scholar.google.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hidden items-center text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex"
+				>
+					Google Scholar <ArrowRight class="ml-1 h-4 w-4" />
+				</a>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-3">
+				{#each publicationList as publication (publication.id)}
+					<PublicationCard {publication} />
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
+
+<!-- 3. HKI Section -->
+{#if activeCategory === 'all' || activeCategory === 'hki'}
+	<section class="bg-white py-12">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
+				<div>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Hak Kekayaan Intelektual (HKI)</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Menampilkan {hkiList.length} sertifikat hak cipta & paten resmi DJKI
+					</p>
+				</div>
+				<a
+					href="https://dgip.go.id"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="hidden items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 sm:flex"
+				>
+					Database DJKI <ExternalLink class="ml-1 h-4 w-4" />
+				</a>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-3">
+				{#each hkiList as record (record.id)}
+					<HkiCard {record} />
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
+
+<!-- 4. Buku Section -->
+{#if activeCategory === 'all' || activeCategory === 'buku'}
+	<section class="py-12 bg-slate-50 border-t border-gray-100">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-gray-200 pb-4">
+				<div>
+					<span class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
+						<Sparkles class="h-3.5 w-3.5" /> KARYA LITERASI & E-BOOK
+					</span>
+					<h2 class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">Buku & Modul Pembelajaran</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Kumpulan buku referensi akademik, e-book praktis, dan modul metodologi penelitian.
+					</p>
+				</div>
+				<a
+					href={resolve('/store')}
+					class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:scale-105 active:scale-95"
+				>
+					Kunjungi Academy Store <ShoppingBag class="h-4 w-4" />
+				</a>
+			</div>
+
+			<!-- Guiding Callout Box -->
+			<div class="relative overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-slate-900 via-primary-950 to-blue-950 p-6 text-white shadow-xl sm:p-10">
+				<div class="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none"></div>
+
+				<div class="relative z-10 flex flex-col items-center justify-between gap-6 lg:flex-row">
+					<div class="flex items-start gap-4 sm:items-center">
+						<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-blue-300 shadow-inner">
+							<Library class="h-7 w-7" />
+						</div>
 						<div>
-							<h3 class="mb-2 line-clamp-3 text-sm font-bold text-slate-900">
-								The Impact of AI-Based Learning Assistant on Students' Learning Outcomes: A
-								Systematic Review
+							<h3 class="text-lg font-bold text-white sm:text-xl">
+								Akses Koleksi Lengkap Buku & Modul Digital
 							</h3>
-							<p class="text-xs text-slate-500">Computers & Education (Q1) • 2024 • Scopus</p>
+							<p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
+								Seluruh publikasi buku referensi, e-book metode penelitian, template skripsi scopus, dan modul analisis data oleh Dr. I Ketut Andika Pradnyana kini dapat diakses dan diunduh secara langsung melalui <span class="font-bold text-blue-300">Academy Store</span>.
+							</p>
 						</div>
 					</div>
-					<div class="mt-auto border-t border-gray-100 pt-4">
-						<Button variant="outline" size="sm" class="w-full">
-							Detail <ExternalLink class="ml-2 h-4 w-4" />
-						</Button>
-					</div>
+
+					<a
+						href={resolve('/store')}
+						class="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-xs sm:text-sm font-extrabold text-slate-900 shadow-xl transition-all hover:bg-blue-50 hover:scale-105 active:scale-95 sm:w-auto"
+					>
+						Lihat Koleksi Buku di Store <ArrowRight class="h-4 w-4 text-blue-600" />
+					</a>
 				</div>
-			{/each}
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
+{/if}
+
+<!-- 5. Pengabdian Section -->
+{#if activeCategory === 'all' || activeCategory === 'pengabdian'}
+	<section class="bg-white py-12">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
+				<div>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Pengabdian Kepada Masyarakat</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Menampilkan {pengabdianList.length} program pengabdian & pelatihan pendidik
+					</p>
+				</div>
+				<a
+					href={resolve('/contact')}
+					class="hidden items-center text-sm font-semibold text-purple-600 hover:text-purple-700 sm:flex"
+				>
+					Undang Pelatihan <ArrowRight class="ml-1 h-4 w-4" />
+				</a>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-2">
+				{#each pengabdianList as program (program.id)}
+					<PengabdianCard {program} />
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
+
+<!-- 6. Inovasi Section -->
+{#if activeCategory === 'all' || activeCategory === 'inovasi'}
+	<section class="bg-slate-50 py-12">
+		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
+				<div>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Inovasi Teknopedagogi</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Menampilkan {inovasiList.length} karya inovasi perangkat lunak & platform AI/VR
+					</p>
+				</div>
+				<a
+					href={resolve('/contact')}
+					class="hidden items-center text-sm font-semibold text-blue-600 hover:text-blue-700 sm:flex"
+				>
+					Diskusi Inovasi <ArrowRight class="ml-1 h-4 w-4" />
+				</a>
+			</div>
+
+			<div class="grid gap-6 md:grid-cols-3">
+				{#each inovasiList as innovation (innovation.id)}
+					<InovasiCard {innovation} />
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
 
 <!-- Call to Action Banner -->
 <section class="py-16">

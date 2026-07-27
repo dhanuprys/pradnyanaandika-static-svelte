@@ -37,10 +37,16 @@
 	let activeCategory = $state('all');
 	let searchQuery = $state('');
 	let sortBy = $state<'latest' | 'price-asc' | 'price-desc' | 'popular'>('latest');
+	let currentPage = $state(1);
+	const ITEMS_PER_PAGE = 8;
 
 	/** Format currency for display */
 	function formatPrice(price: number, currency: string): string {
-		return new Intl.NumberFormat('id-ID', { style: 'currency', currency, maximumFractionDigits: 0 }).format(price);
+		return new Intl.NumberFormat('id-ID', {
+			style: 'currency',
+			currency,
+			maximumFractionDigits: 0
+		}).format(price);
 	}
 
 	/** Products filtered by active category, search query, and sorting selection */
@@ -66,7 +72,7 @@
 			);
 		}
 
-		// Apply Sorting
+		// Sort products
 		if (sortBy === 'price-asc') {
 			result.sort((a, b) => a.price - b.price);
 		} else if (sortBy === 'price-desc') {
@@ -77,6 +83,31 @@
 
 		return result;
 	});
+
+	let totalPages = $derived(Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)));
+
+	let displayedProducts = $derived.by(() => {
+		const start = (currentPage - 1) * ITEMS_PER_PAGE;
+		return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+	});
+
+	function selectCategory(catId: string) {
+		activeCategory = catId;
+		currentPage = 1;
+	}
+
+	function handleSearchInput() {
+		currentPage = 1;
+	}
+
+	function goToPage(p: number) {
+		if (p >= 1 && p <= totalPages) {
+			currentPage = p;
+			if (typeof window !== 'undefined') {
+				window.scrollTo({ top: 500, behavior: 'smooth' });
+			}
+		}
+	}
 </script>
 
 <SEO
@@ -88,29 +119,36 @@
 <div class="bg-slate-50/50 py-8 text-slate-800">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<!-- Hero Section -->
-		<section class="relative overflow-hidden rounded-3xl bg-slate-100/70 p-6 sm:p-10 lg:p-12 mb-8 border border-gray-100">
+		<section
+			class="relative mb-8 overflow-hidden rounded-3xl border border-gray-100 bg-slate-100/70 p-6 sm:p-10 lg:p-12"
+		>
 			<div class="grid items-center gap-8 lg:grid-cols-12">
 				<!-- Left Text & Search -->
 				<div class="lg:col-span-7">
-					<span class="mb-3 inline-block text-xs font-bold uppercase tracking-wider text-indigo-600">
+					<span
+						class="mb-3 inline-block text-xs font-bold tracking-wider text-indigo-600 uppercase"
+					>
 						ACADEMY STORE
 					</span>
-					<h1 class="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl leading-tight">
+					<h1
+						class="mb-4 text-3xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl"
+					>
 						Dapatkan Materi Berkualitas untuk Meningkatkan Kompetensi Anda
 					</h1>
 					<p class="mb-6 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
-						Modul, video course, template, media pembelajaran, dan webinar rekaman pilihan untuk guru,
-						dosen, peneliti, dan praktisi pendidikan.
+						Modul, video course, template, media pembelajaran, dan webinar rekaman pilihan untuk
+						guru, dosen, peneliti, dan praktisi pendidikan.
 					</p>
 
 					<div class="relative max-w-md">
 						<input
 							type="text"
 							bind:value={searchQuery}
+							oninput={handleSearchInput}
 							placeholder="Cari produk yang Anda butuhkan..."
-							class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-4 pr-10 text-sm text-slate-800 placeholder-slate-400 shadow-xs focus:border-blue-500 focus:outline-none"
+							class="w-full rounded-xl border border-gray-200 bg-white py-3.5 pr-10 pl-4 text-base text-slate-800 placeholder-slate-400 shadow-xs focus:border-blue-500 focus:outline-none sm:text-sm"
 						/>
-						<Search class="absolute right-3.5 top-3.5 h-4 w-4 text-slate-400" />
+						<Search class="absolute top-3.5 right-3.5 h-4 w-4 text-slate-400" />
 					</div>
 				</div>
 
@@ -120,7 +158,7 @@
 						<img
 							src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
 							alt="Academy Digital Learning Mockup"
-							class="h-auto max-h-[300px] w-auto rounded-2xl object-cover shadow-xl border border-gray-200/80"
+							class="h-auto max-h-[300px] w-auto rounded-2xl border border-gray-200/80 object-cover shadow-xl"
 						/>
 					</div>
 				</div>
@@ -129,11 +167,13 @@
 
 		<!-- Category Filter Tabs Bar -->
 		<section class="mb-12">
-			<div class="no-scrollbar flex items-center gap-3 overflow-x-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-xs">
+			<div
+				class="no-scrollbar flex snap-x items-center gap-3 overflow-x-auto rounded-2xl border border-gray-100 bg-white p-2 whitespace-nowrap shadow-xs"
+			>
 				{#each categories as category (category.id)}
 					<button
-						onclick={() => (activeCategory = category.id)}
-						class="flex shrink-0 items-center gap-3 rounded-xl px-4 py-3 transition-all
+						onclick={() => selectCategory(category.id)}
+						class="flex min-h-[44px] shrink-0 snap-start items-center gap-3 rounded-xl px-4 py-3 transition-all
 						{activeCategory === category.id
 							? 'bg-blue-600 text-white shadow-md'
 							: 'bg-white text-slate-700 hover:bg-slate-50'}"
@@ -145,7 +185,7 @@
 							<category.icon class="h-4 w-4" />
 						</div>
 						<div class="text-left">
-							<div class="text-xs font-bold leading-tight whitespace-nowrap">{category.label}</div>
+							<div class="text-xs leading-tight font-bold whitespace-nowrap">{category.label}</div>
 							<div
 								class="text-[10px] font-medium whitespace-nowrap
 								{activeCategory === category.id ? 'text-blue-100' : 'text-slate-400'}"
@@ -163,7 +203,9 @@
 			<div class="mb-6 flex flex-wrap items-center justify-between gap-4">
 				<div>
 					<h2 class="text-xl font-bold text-slate-900">Katalog Produk</h2>
-					<p class="text-xs text-slate-500">Menampilkan {filteredProducts.length} dari {data.products.length} produk</p>
+					<p class="text-xs text-slate-500">
+						Menampilkan {displayedProducts.length} dari {filteredProducts.length} produk
+					</p>
 				</div>
 
 				<div class="flex items-center gap-3">
@@ -171,7 +213,7 @@
 					<select
 						id="sort-select"
 						bind:value={sortBy}
-						class="rounded-xl border border-gray-200 bg-white py-2 px-3 text-xs font-semibold text-slate-700 shadow-xs focus:border-blue-500 focus:outline-none"
+						class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-xs focus:border-blue-500 focus:outline-none"
 					>
 						<option value="latest">Terbaru</option>
 						<option value="popular">Paling Populer</option>
@@ -182,13 +224,8 @@
 			</div>
 
 			<div class="relative">
-				<!-- Carousel Next Button on Right -->
-				<button class="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full border border-gray-100 bg-white shadow-md text-slate-700 hover:bg-slate-50 lg:flex">
-					<ChevronRight class="h-5 w-5" />
-				</button>
-
 				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-					{#each filteredProducts as product (product.id)}
+					{#each displayedProducts as product (product.id)}
 						<ProductCard
 							image={product.images[0]}
 							title={product.name}
@@ -219,7 +256,10 @@
 		<section class="mb-12">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-xl font-bold text-slate-900">Produk Populer</h2>
-				<a href={resolve('/store')} class="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700">
+				<a
+					href={resolve('/store')}
+					class="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
+				>
 					Lihat Semua Produk <ArrowRight class="h-4 w-4" />
 				</a>
 			</div>
@@ -228,18 +268,30 @@
 				{#each data.products.slice(0, 4) as product (product.id)}
 					<a
 						href={resolve(`/store/${product.id}`)}
-						class="group flex gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-all hover:shadow-md hover:border-blue-100"
+						class="group flex gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-xs transition-all hover:border-blue-100 hover:shadow-md"
 					>
 						<div class="flex w-24 shrink-0 overflow-hidden rounded-xl bg-slate-100">
-							<img src={product.images[0]} alt={product.name} class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+							<img
+								src={product.images[0]}
+								alt={product.name}
+								class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+							/>
 						</div>
 						<div class="flex flex-1 flex-col justify-between">
 							<div>
-								<h3 class="mb-1 text-xs font-bold leading-snug text-slate-900 line-clamp-2 group-hover:text-blue-600 transition-colors">{product.name}</h3>
-								<p class="text-[11px] leading-relaxed text-slate-500 line-clamp-2">{product.shortDescription}</p>
+								<h3
+									class="mb-1 line-clamp-2 text-xs leading-snug font-bold text-slate-900 transition-colors group-hover:text-blue-600"
+								>
+									{product.name}
+								</h3>
+								<p class="line-clamp-2 text-[11px] leading-relaxed text-slate-500">
+									{product.shortDescription}
+								</p>
 							</div>
 							<div class="pt-2">
-								<div class="text-sm font-extrabold text-blue-600">{formatPrice(product.price, product.currency)}</div>
+								<div class="text-sm font-extrabold text-blue-600">
+									{formatPrice(product.price, product.currency)}
+								</div>
 								<div class="flex items-center gap-1 text-[10px] text-amber-400">
 									{#each [0, 1, 2, 3, 4] as i (i)}<Star class="h-3 w-3 fill-current" />{/each}
 									<span class="ml-0.5 text-slate-400">({product.stock})</span>
@@ -255,7 +307,9 @@
 		<section class="mb-12 rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
 			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+					>
 						<ShieldCheck class="h-6 w-6" />
 					</div>
 					<div>
@@ -265,7 +319,9 @@
 				</div>
 
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+					>
 						<DownloadCloud class="h-6 w-6" />
 					</div>
 					<div>
@@ -275,7 +331,9 @@
 				</div>
 
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+					>
 						<Headphones class="h-6 w-6" />
 					</div>
 					<div>
@@ -285,12 +343,16 @@
 				</div>
 
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600"
+					>
 						<Award class="h-6 w-6" />
 					</div>
 					<div>
 						<h4 class="text-sm font-bold text-slate-900">Kualitas Terjamin</h4>
-						<p class="text-xs text-slate-500">Materi berkualitas dibuat oleh praktisi & akademisi.</p>
+						<p class="text-xs text-slate-500">
+							Materi berkualitas dibuat oleh praktisi & akademisi.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -300,7 +362,9 @@
 		<section class="mb-12">
 			<h2 class="mb-6 text-xl font-bold text-slate-900">Apa Kata Mereka?</h2>
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-				<div class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
+				<div
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+				>
 					<div>
 						<div class="mb-4 flex text-amber-400">
 							{#each [0, 1, 2, 3, 4] as i (i)}<Star class="h-4 w-4 fill-current" />{/each}
@@ -315,7 +379,9 @@
 					</div>
 				</div>
 
-				<div class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
+				<div
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+				>
 					<div>
 						<div class="mb-4 flex text-amber-400">
 							{#each [0, 1, 2, 3, 4] as i (i)}<Star class="h-4 w-4 fill-current" />{/each}
@@ -330,7 +396,9 @@
 					</div>
 				</div>
 
-				<div class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs">
+				<div
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+				>
 					<div>
 						<div class="mb-4 flex text-amber-400">
 							{#each [0, 1, 2, 3, 4] as i (i)}<Star class="h-4 w-4 fill-current" />{/each}
@@ -349,20 +417,26 @@
 
 		<!-- CTA Banner Section -->
 		<section>
-			<div class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-600 p-6 text-white shadow-md sm:flex-row sm:p-8">
+			<div
+				class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-600 p-6 text-white shadow-md sm:flex-row sm:p-8"
+			>
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 border border-white/20 text-white">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white"
+					>
 						<ShoppingBag class="h-6 w-6" />
 					</div>
 					<div>
 						<h3 class="text-lg font-bold text-white sm:text-xl">Belum menemukan yang Anda cari?</h3>
-						<p class="text-xs text-blue-100 sm:text-sm">Hubungi kami untuk rekomendasi produk terbaik sesuai kebutuhan Anda.</p>
+						<p class="text-xs text-blue-100 sm:text-sm">
+							Hubungi kami untuk rekomendasi produk terbaik sesuai kebutuhan Anda.
+						</p>
 					</div>
 				</div>
 
 				<a
 					href={resolve('/contact')}
-					class="flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-blue-600 shadow-xs hover:bg-blue-50 transition-colors"
+					class="flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-blue-600 shadow-xs transition-colors hover:bg-blue-50"
 				>
 					Hubungi Kami <MessageCircle class="h-4 w-4" />
 				</a>

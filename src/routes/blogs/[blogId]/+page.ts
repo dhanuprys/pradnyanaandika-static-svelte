@@ -6,7 +6,7 @@ export const prerender = true;
 
 export async function load({ params }) {
 	const post = await getPostBySlug(params.blogId);
-	
+
 	let relatedProducts: Product[] = [];
 	if (post.metadata.relatedProductIds && post.metadata.relatedProductIds.length > 0) {
 		const productPromises = post.metadata.relatedProductIds.map((id) =>

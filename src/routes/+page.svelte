@@ -20,9 +20,10 @@
 	import ArticleCard from '$lib/components/ui/ArticleCard.svelte';
 	import SEO from '$lib/components/seo/SEO.svelte';
 	import { SITE_CONFIG } from '$lib/config/site';
-	import type { PageData } from './$types';
+	import { getFeaturedResearch } from '$lib/data/research';
 
 	let { data }: { data: PageData } = $props();
+	const featuredResearch = getFeaturedResearch();
 </script>
 
 <SEO
@@ -43,55 +44,84 @@
 	</div>
 
 	<div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex flex-col items-center gap-4 lg:flex-row lg:items-end lg:gap-20">
-			<!-- Persona Image (Left side, fitted to background bottom) -->
+		<div
+			class="flex flex-col-reverse items-center gap-8 pt-6 sm:pt-10 lg:flex-row lg:items-end lg:gap-16 lg:pt-0"
+		>
+			<!-- Persona Image (Left side on desktop, bottom on mobile) -->
 			<div class="flex w-full shrink-0 items-end justify-center lg:w-auto lg:justify-start">
 				<img
-					src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+					src={resolve('/images/andika.png')}
 					alt="Dr. I Ketut Andika"
-					class="h-auto max-h-[480px] w-auto object-contain object-bottom drop-shadow-2xl lg:max-h-[620px]"
+					class="h-auto max-h-[340px] w-auto object-contain object-bottom drop-shadow-2xl sm:max-h-[440px] lg:max-h-[600px]"
 				/>
 			</div>
 
-			<!-- Text Content (Right side, full width flex-1) -->
-			<div class="w-full flex-1 lg:pb-26">
-				<h1 class="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-					Dr. I Ketut Andika Pradnyana, <br />S.Pd., M.Pd.
+			<!-- Text Content (Right side) -->
+			<div class="w-full flex-1 text-center lg:pb-24 lg:text-left">
+				<h1
+					class="mb-3 text-3xl leading-tight font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+				>
+					Dr. I Ketut Andika Pradnyana, <br class="hidden sm:inline" />S.Pd., M.Pd.
 				</h1>
-				<p class="mb-6 text-lg font-medium text-primary-200">
+				<p class="mb-4 text-base font-semibold text-blue-300 sm:text-lg">
 					Educational Technology Researcher | AI & VR Learning Innovator
 				</p>
-				<p class="mb-8 text-base text-gray-300">
+				<p
+					class="mx-auto mb-8 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base lg:mx-0"
+				>
 					Dosen, peneliti, dan inovator di bidang teknologi pendidikan yang berfokus pada
 					pengembangan Artificial Intelligence, Virtual Reality, dan media pembelajaran inovatif
 					untuk transformasi pendidikan.
 				</p>
-				<div class="mb-10 flex flex-wrap gap-4">
-					<Button variant="primary" size="lg" href={resolve('/portofolio')}>
+				<div
+					class="mb-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4 lg:justify-start"
+				>
+					<Button
+						variant="primary"
+						size="lg"
+						href={resolve('/portofolio')}
+						class="w-full justify-center sm:w-auto"
+					>
 						Lihat Portofolio <ArrowRight class="ml-2 h-5 w-5" />
 					</Button>
 					<Button
 						variant="secondary"
 						size="lg"
 						href={resolve('/store')}
-						class="hover:bg-accent-600! bg-accent-500! text-white!"
+						class="hover:bg-accent-600! w-full justify-center bg-accent-500! text-white! sm:w-auto"
 					>
 						Academy Store <ShoppingCart class="ml-2 h-5 w-5" />
 					</Button>
 				</div>
-				<!-- External Links (Mocked) -->
-				<div class="flex flex-wrap items-center gap-6 text-sm font-semibold text-gray-400">
-					<div class="flex items-center gap-2">
-						<GraduationCap class="h-5 w-5" /> Google Scholar
+				<!-- External Links -->
+				<div
+					class="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300 sm:gap-6 sm:text-sm lg:justify-start"
+				>
+					<div
+						class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5"
+					>
+						<GraduationCap class="h-4 w-4 text-blue-400" /> Google Scholar
 					</div>
-					<div class="flex items-center gap-2">
-						<span class="rounded bg-gray-600 px-1 text-xs font-bold text-white">SINTA</span>
+					<div
+						class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5"
+					>
+						<span class="rounded bg-blue-600 px-1.5 py-0.5 text-xs font-extrabold text-white"
+							>SINTA</span
+						>
 					</div>
-					<div class="flex items-center gap-2">
-						<span class="rounded bg-white px-1 text-xs font-bold text-green-500">ID</span> ORCID
+					<div
+						class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5"
+					>
+						<span class="rounded bg-emerald-500 px-1.5 py-0.5 text-xs font-extrabold text-white"
+							>ID</span
+						> ORCID
 					</div>
-					<div class="flex items-center gap-2">
-						<span class="rounded bg-teal-500 px-1 text-xs font-bold text-white">R&supE;</span> ResearchGate
+					<div
+						class="flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5"
+					>
+						<span class="rounded bg-teal-500 px-1.5 py-0.5 text-xs font-extrabold text-white"
+							>R&supE;</span
+						> ResearchGate
 					</div>
 				</div>
 			</div>
@@ -183,24 +213,15 @@
 			</a>
 		</div>
 		<div class="grid gap-8 md:grid-cols-3">
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="AI Companion Pembelajaran Adaptif"
-				title="KodiBot AI"
-				description="Chatbot AI untuk mendukung literasi digital dan pembelajaran berbasis percakapan interaktif."
-			/>
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="Virtual Reality untuk Pembelajaran Biologi"
-				title="VR Biology Learning"
-				description="Media pembelajaran VR imersif untuk meningkatkan pemahaman konsep biologi secara visual dan interaktif."
-			/>
-			<PortfolioCard
-				image="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-				category="Lingkungan Belajar Imersif"
-				title="Immersive Learning Environment"
-				description="Pengembangan lingkungan belajar berbasis VR/AR yang mendorong keterlibatan aktif siswa."
-			/>
+			{#each featuredResearch as item (item.id)}
+				<PortfolioCard
+					image={item.image}
+					category={item.categoryLabel}
+					title={item.title}
+					description={item.shortDescription || item.description}
+					href={item.targetUrl || resolve('/portofolio')}
+				/>
+			{/each}
 		</div>
 	</div>
 </section>

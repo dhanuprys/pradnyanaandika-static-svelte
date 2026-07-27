@@ -24,8 +24,7 @@ export const SITE_CONFIG = {
 		shortName: 'I Ketut Andika Pradnyana',
 		role: 'Dosen, Peneliti & Edukator Teknopedagogi',
 		jobTitle: 'Lecturer & Researcher in Educational Technology',
-		avatar:
-			'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+		avatar: 'https://pradnya.com/images/andika.png',
 		url: 'https://pradnya.com/about',
 		sameAs: [
 			'https://scholar.google.com',
@@ -38,8 +37,13 @@ export const SITE_CONFIG = {
 		name: 'Andika Academy',
 		logo: 'https://pradnya.com/favicon.svg'
 	},
-	defaultOgImage:
-		'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80'
+	contact: {
+		phone: '+62 813-3800-5074',
+		whatsapp: '6281338005074',
+		whatsappUrl: 'https://wa.me/6281338005074',
+		email: 'info@andikaacademy.id'
+	},
+	defaultOgImage: 'https://pradnya.com/images/andika.png'
 };
 
 /**

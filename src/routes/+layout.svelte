@@ -7,6 +7,8 @@
 	import SEO from '$lib/components/seo/SEO.svelte';
 	import { getPersonSchema, getOrganizationSchema } from '$lib/config/site';
 
+	import ScrollToTop from '$lib/components/ui/ScrollToTop.svelte';
+
 	let { children } = $props();
 	const baseSchemas = [getPersonSchema(), getOrganizationSchema()];
 </script>
@@ -14,10 +16,13 @@
 <SEO jsonLd={baseSchemas} />
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div class="flex min-h-screen flex-col bg-slate-50 font-sans text-slate-800">
+<div
+	class="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-slate-50 font-sans text-slate-800"
+>
 	<Header />
-	<main class="flex grow flex-col">
+	<main class="flex w-full grow flex-col">
 		{@render children()}
 	</main>
 	<Footer />
+	<ScrollToTop />
 </div>
