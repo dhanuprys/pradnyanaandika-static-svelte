@@ -6,6 +6,7 @@
 		ShieldCheck,
 		Zap,
 		MessageCircle,
+		ShoppingCart,
 		ShoppingBag,
 		Star,
 		Share2,
@@ -21,6 +22,8 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import ProductCard from '$lib/components/ui/ProductCard.svelte';
+	import { cart } from '$lib/stores/cart.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		product,
@@ -65,6 +68,18 @@
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		}
+	}
+
+	function addToCart() {
+		cart.add({
+			id: product.id,
+			name: product.name,
+			price: product.price,
+			image: product.images[0]
+		});
+		toast.success('Berhasil ditambahkan', {
+			description: `${product.name} telah ditambahkan ke keranjang.`
+		});
 	}
 </script>
 
@@ -355,14 +370,23 @@
 
 				<!-- Action Buttons -->
 				<div class="mt-auto space-y-3">
-					<a
-						href={whatsappUrl}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-4 text-base font-bold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg focus:outline-none"
-					>
-						<MessageCircle class="h-5 w-5 fill-current" /> Beli Sekarang via WhatsApp
-					</a>
+					<div class="flex gap-3">
+						<button
+							onclick={addToCart}
+							class="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none"
+						>
+							<ShoppingCart class="h-5 w-5" /> Tambahkan ke Keranjang
+						</button>
+						<a
+							href={whatsappUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg focus:outline-none"
+							aria-label="Beli via WhatsApp"
+						>
+							<MessageCircle class="h-5 w-5 fill-current" />
+						</a>
+					</div>
 
 					<div class="flex gap-3">
 						<a
@@ -470,14 +494,22 @@
 		<div class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Harga Total</div>
 		<div class="text-base font-black text-blue-600">{formattedPrice}</div>
 	</div>
-	<a
-		href={whatsappUrl}
-		target="_blank"
-		rel="noopener noreferrer"
-		class="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:bg-emerald-700"
-	>
-		<MessageCircle class="h-4 w-4 fill-current" /> Beli via WA
-	</a>
+	<div class="flex gap-2">
+		<button
+			onclick={addToCart}
+			class="flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:bg-blue-700"
+		>
+			<ShoppingCart class="h-4 w-4" />
+		</button>
+		<a
+			href={whatsappUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:bg-emerald-700"
+		>
+			<MessageCircle class="h-4 w-4 fill-current" /> Beli via WA
+		</a>
+	</div>
 </div>
 
 <!-- Fullscreen Lightbox Zoom Modal -->

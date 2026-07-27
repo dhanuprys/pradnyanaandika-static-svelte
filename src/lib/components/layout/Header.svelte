@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import { ShoppingCart, Search, Menu, X } from '@lucide/svelte';
 	import { slide } from 'svelte/transition';
+	import { cart } from '$lib/stores/cart.svelte';
 
 	const navLinks = [
 		{ name: 'Home', href: '/' },
@@ -98,10 +99,12 @@
 						: 'text-gray-600 hover:text-blue-600'}"
 				>
 					<ShoppingCart class="h-5 w-5" />
-					<span
-						class="absolute top-0 right-0 inline-flex translate-x-1/4 -translate-y-1/4 transform items-center justify-center rounded-full bg-blue-600 px-1.5 py-0.5 text-xs leading-none font-bold text-white shadow-xs"
-						>3</span
-					>
+					{#if cart.totalItems > 0}
+						<span
+							class="absolute top-0 right-0 inline-flex translate-x-1/4 -translate-y-1/4 transform items-center justify-center rounded-full bg-blue-600 px-1.5 py-0.5 text-xs leading-none font-bold text-white shadow-xs"
+							>{cart.totalItems}</span
+						>
+					{/if}
 				</button>
 				<button
 					class="hidden p-2 transition-colors sm:block {isDarkTheme

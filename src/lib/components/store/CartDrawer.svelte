@@ -2,15 +2,8 @@
 	import { X, Trash2, ShoppingBag, ArrowRight } from '@lucide/svelte';
 	import { slide, fade } from 'svelte/transition';
 	import { resolve } from '$app/paths';
-
-	interface CartItem {
-		id: string;
-		name: string;
-		price: number;
-		formattedPrice: string;
-		image: string;
-		quantity: number;
-	}
+	import { cart } from '$lib/stores/cart.svelte';
+	import { toast } from 'svelte-sonner';
 
 	interface Props {
 		isOpen: boolean;
@@ -19,65 +12,28 @@
 
 	let { isOpen, onClose }: Props = $props();
 
-	let items = $state<CartItem[]>([
-		{
-			id: 'modul-kualitatif',
-			name: 'Modul Praktis Analisis Data Kualitatif NVivo',
-			price: 150000,
-			formattedPrice: 'Rp 150.000',
-			image:
-				'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-			quantity: 1
-		},
-		{
-			id: 'template-skripsi',
-			name: 'Template Skripsi & Disertasi Standard Scopus',
-			price: 99000,
-			formattedPrice: 'Rp 99.000',
-			image:
-				'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-			quantity: 1
-		},
-		{
-			id: 'webinar-scopus',
-			name: 'Rekaman Webinar Strategi Tembus Scopus Q1-Q2',
-			price: 199000,
-			formattedPrice: 'Rp 199.000',
-			image:
-				'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-			quantity: 1
-		}
-	]);
-
-	function removeItem(id: string) {
-		items = items.filter((item) => item.id !== id);
-	}
-
-	function updateQuantity(id: string, delta: number) {
-		items = items.map((item) => {
-			if (item.id === id) {
-				const newQty = Math.max(1, item.quantity + delta);
-				return { ...item, quantity: newQty };
-			}
-			return item;
+	function removeItem(id: string, name: string) {
+		cart.remove(id);
+		toast.info('Item dihapus', {
+			description: `${name} telah dihapus dari keranjang.`
 		});
 	}
 
-	let totalPrice = $derived(
-		items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-	);
+	function updateQuantity(id: string, delta: number) {
+		cart.updateQuantity(id, delta);
+	}
 
 	let formattedTotal = $derived(
 		new Intl.NumberFormat('id-ID', {
 			style: 'currency',
 			currency: 'IDR',
 			maximumFractionDigits: 0
-		}).format(totalPrice)
+		}).format(cart.totalPrice)
 	);
 
 	function checkoutViaWhatsApp() {
-		if (items.length === 0) return;
-		const summary = items
+		if (cart.items.length === 0) return;
+		const summary = cart.items
 			.map((item) => `- ${item.name} (${item.quantity}x)`)
 			.join('%0A');
 		const message = `Halo Dr. Andika, saya berminat untuk membeli produk berikut:%0A%0A${summary}%0A%0ATotal: ${formattedTotal}%0A%0AMohon instruksi pembayarannya.`;
@@ -109,7 +65,7 @@
 				<ShoppingBag class="h-5 w-5 text-blue-600" />
 				<h2 class="text-lg font-bold text-slate-900">Keranjang Belanja</h2>
 				<span class="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-bold text-blue-700">
-					{items.length}
+					{cart.totalItems}
 				</span>
 			</div>
 			<button
@@ -122,7 +78,7 @@
 
 		<!-- Body Items List -->
 		<div class="flex-1 overflow-y-auto p-5 space-y-4">
-			{#if items.length === 0}
+			{#if cart.items.length === 0}
 				<div class="flex flex-col items-center justify-center h-64 text-center">
 					<ShoppingBag class="h-16 w-16 text-slate-300 mb-3" />
 					<p class="text-sm font-bold text-slate-700">Keranjang Anda Kosong</p>
@@ -138,7 +94,7 @@
 					</a>
 				</div>
 			{:else}
-				{#each items as item (item.id)}
+				{#each cart.items as item (item.id)}
 					<div class="flex gap-4 rounded-2xl border border-gray-100 bg-slate-50/50 p-3.5 shadow-xs">
 						<img
 							src={item.image}
@@ -151,7 +107,7 @@
 									{item.name}
 								</h3>
 								<button
-									onclick={() => removeItem(item.id)}
+									onclick={() => removeItem(item.id, item.name)}
 									class="text-slate-400 hover:text-rose-600 transition-colors"
 								>
 									<Trash2 class="h-4 w-4" />
@@ -160,7 +116,7 @@
 
 							<div class="flex items-center justify-between mt-2">
 								<span class="text-xs font-bold text-blue-600">
-									{item.formattedPrice}
+									{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.price)}
 								</span>
 
 								<div class="flex items-center rounded-lg border border-gray-200 bg-white">
@@ -186,7 +142,7 @@
 		</div>
 
 		<!-- Footer Total & Checkout Button -->
-		{#if items.length > 0}
+		{#if cart.items.length > 0}
 			<div class="border-t border-gray-100 p-5 bg-slate-50/50 space-y-4">
 				<div class="flex items-center justify-between">
 					<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pembayaran</span>

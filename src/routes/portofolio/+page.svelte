@@ -76,7 +76,7 @@
 
 <!-- Portfolio Hero -->
 <section
-	class="relative overflow-hidden bg-gradient-to-r from-slate-50 via-slate-100 via-50% to-primary-950 pt-6 pb-12 lg:pt-8 lg:pb-0"
+	class="relative overflow-hidden bg-linear-to-r from-slate-100 via-slate-100 via-50% to-primary-950 pt-6 pb-12 lg:pt-8 lg:pb-0"
 >
 	<!-- Tech icons floating in deep blue background on the right -->
 	<div
@@ -128,7 +128,7 @@
 					class="relative h-[340px] w-full max-w-[340px] sm:h-[460px] sm:max-w-[440px] lg:h-[480px]"
 				>
 					<div
-						class="absolute inset-0 rounded-t-3xl bg-gradient-to-t from-primary-950 via-primary-900 to-blue-900 shadow-2xl"
+						class="absolute inset-0 rounded-t-3xl"
 					></div>
 					<img
 						src={resolve('/images/andika.png')}

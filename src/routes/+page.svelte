@@ -142,59 +142,59 @@
 </section>
 
 <!-- Expertise Section -->
-<section class="bg-slate-50 py-24">
+<section class="bg-slate-50 py-16 lg:py-24">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<SectionTitle title="Bidang Keahlian" />
-		<div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+		<div class="mt-8 lg:mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
 			<!-- Expertise Item -->
 			<div
-				class="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
+				class="rounded-2xl border border-gray-100 bg-white p-5 sm:p-8 text-center shadow-sm transition-shadow hover:shadow-md"
 			>
 				<div
-					class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-600"
+					class="mx-auto mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-600"
 				>
-					<Bot class="h-8 w-8" />
+					<Bot class="h-6 w-6 sm:h-8 sm:w-8" />
 				</div>
-				<h3 class="mb-3 text-xl font-bold text-slate-900">AI Education</h3>
-				<p class="text-sm text-slate-600">
+				<h3 class="mb-2 sm:mb-3 text-base sm:text-xl font-bold text-slate-900">AI Education</h3>
+				<p class="text-xs sm:text-sm text-slate-600">
 					Pemanfaatan Artificial Intelligence dalam pembelajaran adaptif.
 				</p>
 			</div>
 
 			<div
-				class="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
+				class="rounded-2xl border border-gray-100 bg-white p-5 sm:p-8 text-center shadow-sm transition-shadow hover:shadow-md"
 			>
 				<div
-					class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600"
+					class="mx-auto mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600"
 				>
-					<MonitorPlay class="h-8 w-8" />
+					<MonitorPlay class="h-6 w-6 sm:h-8 sm:w-8" />
 				</div>
-				<h3 class="mb-3 text-xl font-bold text-slate-900">Virtual Reality Learning</h3>
-				<p class="text-sm text-slate-600">Pengembangan VR untuk pembelajaran imersif.</p>
+				<h3 class="mb-2 sm:mb-3 text-base sm:text-xl font-bold text-slate-900">Virtual Reality Learning</h3>
+				<p class="text-xs sm:text-sm text-slate-600">Pengembangan VR untuk pembelajaran imersif.</p>
 			</div>
 
 			<div
-				class="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
+				class="rounded-2xl border border-gray-100 bg-white p-5 sm:p-8 text-center shadow-sm transition-shadow hover:shadow-md"
 			>
 				<div
-					class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-100 text-teal-600"
+					class="mx-auto mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-teal-100 text-teal-600"
 				>
-					<Lightbulb class="h-8 w-8" />
+					<Lightbulb class="h-6 w-6 sm:h-8 sm:w-8" />
 				</div>
-				<h3 class="mb-3 text-xl font-bold text-slate-900">Educational Technology</h3>
-				<p class="text-sm text-slate-600">Integrasi teknologi digital dalam proses belajar.</p>
+				<h3 class="mb-2 sm:mb-3 text-base sm:text-xl font-bold text-slate-900">Educational Technology</h3>
+				<p class="text-xs sm:text-sm text-slate-600">Integrasi teknologi digital dalam proses belajar.</p>
 			</div>
 
 			<div
-				class="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md"
+				class="rounded-2xl border border-gray-100 bg-white p-5 sm:p-8 text-center shadow-sm transition-shadow hover:shadow-md"
 			>
 				<div
-					class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600"
+					class="mx-auto mb-4 sm:mb-6 flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600"
 				>
-					<BookOpen class="h-8 w-8" />
+					<BookOpen class="h-6 w-6 sm:h-8 sm:w-8" />
 				</div>
-				<h3 class="mb-3 text-xl font-bold text-slate-900">Learning Media Development</h3>
-				<p class="text-sm text-slate-600">Desain dan pengembangan media pembelajaran inovatif.</p>
+				<h3 class="mb-2 sm:mb-3 text-base sm:text-xl font-bold text-slate-900">Learning Media Development</h3>
+				<p class="text-xs sm:text-sm text-slate-600">Desain dan pengembangan media pembelajaran inovatif.</p>
 			</div>
 		</div>
 	</div>

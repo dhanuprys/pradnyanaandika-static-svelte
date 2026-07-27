@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import Header from '$lib/components/layout/Header.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
+	import { Toaster } from 'svelte-sonner';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
 	import { getPersonSchema, getOrganizationSchema } from '$lib/config/site';
@@ -25,4 +26,5 @@
 	</main>
 	<Footer />
 	<ScrollToTop />
+	<Toaster position="top-right" richColors />
 </div>
