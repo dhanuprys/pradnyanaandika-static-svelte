@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BlogPost } from '$lib/data/blogs/types';
+	import type { BlogPost } from '$cms';
 	import { resolve } from '$app/paths';
 
 	let { post }: { post: BlogPost } = $props();

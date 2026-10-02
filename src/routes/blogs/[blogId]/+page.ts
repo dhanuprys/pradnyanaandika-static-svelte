@@ -1,6 +1,6 @@
-import { getPostBySlug, getPostSlugs } from '$lib/data/blogs/index';
-import { getProductById } from '$lib/data/products/index';
-import type { Product } from '$lib/data/products/types';
+import { getPostBySlug, getPostSlugs } from '$cms';
+import { getProductById } from '$cms';
+import type { Product } from '$cms';
 
 export const prerender = true;
 

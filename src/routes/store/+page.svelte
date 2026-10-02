@@ -6,9 +6,7 @@
 		MonitorPlay,
 		Video,
 		ShoppingBag,
-		ShoppingCart,
 		Star,
-		ChevronRight,
 		ArrowRight,
 		ShieldCheck,
 		DownloadCloud,
@@ -19,7 +17,7 @@
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 	import ProductCard from '$lib/components/ui/ProductCard.svelte';
 	import type { PageData } from './$types';
 
@@ -29,7 +27,7 @@
 		{ id: 'all', label: 'Semua Produk', desc: 'Lihat semua', icon: ShoppingBag },
 		{ id: 'modul', label: 'Modul Pembelajaran', desc: 'Modul PDF & E-Book', icon: BookOpen },
 		{ id: 'video', label: 'Video Course', desc: 'Kursus Video Premium', icon: MonitorPlay },
-		{ id: 'template', label: 'Template Penelitian', desc: 'Template & Dokumen', icon: FileText },
+		{ id: 'template', label: 'Contoh Proposal', desc: 'Penelitian & Pengabdian', icon: FileText },
 		{ id: 'media', label: 'Media Pembelajaran', desc: 'Media Interaktif', icon: FileCode },
 		{ id: 'webinar', label: 'Webinar Rekaman', desc: 'Rekaman Webinar', icon: Video }
 	];
@@ -84,8 +82,6 @@
 		return result;
 	});
 
-	let totalPages = $derived(Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)));
-
 	let displayedProducts = $derived.by(() => {
 		const start = (currentPage - 1) * ITEMS_PER_PAGE;
 		return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
@@ -99,20 +95,11 @@
 	function handleSearchInput() {
 		currentPage = 1;
 	}
-
-	function goToPage(p: number) {
-		if (p >= 1 && p <= totalPages) {
-			currentPage = p;
-			if (typeof window !== 'undefined') {
-				window.scrollTo({ top: 500, behavior: 'smooth' });
-			}
-		}
-	}
 </script>
 
 <SEO
-	title="Academy Store - Modul, E-Book & Tools | Dr. I Ketut Andika Pradnyana"
-	description="Toko resmi Andika Academy oleh Dr. I Ketut Andika Pradnyana. Modul pelatihan AI, e-book metodologi penelitian, template data analisis, & instrumen publikasi Scopus."
+	title="Academy Store - Modul, E-Book & Tools | I Ketut Andika Pradnyana"
+	description="Toko resmi Andika Academy oleh I Ketut Andika Pradnyana. Modul pelatihan AI, e-book metodologi penelitian, template data analisis, & instrumen publikasi Scopus."
 	canonical="{SITE_CONFIG.url}/store"
 />
 

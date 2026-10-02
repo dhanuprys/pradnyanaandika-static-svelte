@@ -8,13 +8,12 @@
 		Copy,
 		Check,
 		User,
-		BookOpen,
 		ShoppingBag
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 
 	import { onMount } from 'svelte';
 
@@ -78,7 +77,7 @@
 </script>
 
 <SEO
-	title="{data.metadata?.title || 'Artikel'} | Dr. I Ketut Andika Pradnyana"
+	title="{data.metadata?.title || 'Artikel'} | I Ketut Andika Pradnyana"
 	description={data.metadata?.description || SITE_CONFIG.description}
 	canonical="{SITE_CONFIG.url}/blogs/{data.slug}"
 	type="article"
@@ -92,9 +91,9 @@
 />
 
 <!-- Reading Progress Bar -->
-<div class="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-200/20 pointer-events-none">
+<div class="pointer-events-none fixed top-0 right-0 left-0 z-50 h-1 bg-slate-200/20">
 	<div
-		class="h-full bg-blue-500 transition-all duration-150 ease-out shadow-sm"
+		class="h-full bg-blue-500 shadow-sm transition-all duration-150 ease-out"
 		style="width: {scrollProgress}%;"
 	></div>
 </div>
@@ -123,7 +122,10 @@
 					>
 				</nav>
 
-				<a href={resolve('/')} class="text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+				<a
+					href={resolve('/')}
+					class="text-xs font-semibold text-slate-400 transition-colors hover:text-white"
+				>
 					Beranda
 				</a>
 			</div>
@@ -188,7 +190,9 @@
 		<div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
 			<!-- Main Article Body (8 cols) -->
 			<main class="lg:col-span-8">
-				<div class="rounded-none border-0 bg-transparent p-0 shadow-none sm:rounded-3xl sm:border sm:border-gray-100 sm:bg-white sm:p-10 sm:shadow-xs">
+				<div
+					class="rounded-none border-0 bg-transparent p-0 shadow-none sm:rounded-3xl sm:border sm:border-gray-100 sm:bg-white sm:p-10 sm:shadow-xs"
+				>
 					<!-- Article Description / Lead Paragraph -->
 					{#if data.metadata?.description}
 						<p
@@ -241,12 +245,12 @@
 					</h3>
 					<div class="mb-4 flex items-center gap-4">
 						<img
-							src={resolve('/images/andika.png')}
-							alt="Dr. Andika"
+							src="/images/andika.png"
+							alt="Andika"
 							class="h-14 w-14 rounded-2xl object-cover shadow-sm"
 						/>
 						<div>
-							<div class="text-sm font-bold text-slate-900">Dr. I Ketut Andika Pradnyana</div>
+							<div class="text-sm font-bold text-slate-900">I Ketut Andika Pradnyana</div>
 							<div class="text-xs text-slate-500">Peneliti & Dosen</div>
 						</div>
 					</div>
@@ -264,11 +268,9 @@
 
 				<!-- Store Cross-Selling Widget -->
 				{#if data.relatedProducts && data.relatedProducts.length > 0}
-					<div
-						class="rounded-2xl border border-gray-100 bg-white p-5 text-slate-900 shadow-xs"
-					>
+					<div class="rounded-2xl border border-gray-100 bg-white p-5 text-slate-900 shadow-xs">
 						<div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3">
-							<h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+							<h3 class="text-xs font-extrabold tracking-wider text-slate-500 uppercase">
 								Materi & Produk Terkait
 							</h3>
 							<ShoppingBag class="h-4 w-4 text-slate-400" />
@@ -312,11 +314,9 @@
 					</div>
 				{:else}
 					<!-- Default Store CTA Widget -->
-					<div
-						class="rounded-2xl border border-gray-100 bg-white p-5 text-slate-900 shadow-xs"
-					>
+					<div class="rounded-2xl border border-gray-100 bg-white p-5 text-slate-900 shadow-xs">
 						<div class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3">
-							<h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">
+							<h3 class="text-xs font-extrabold tracking-wider text-slate-500 uppercase">
 								Modul & Template Pembelajaran
 							</h3>
 							<ShoppingBag class="h-4 w-4 text-slate-400" />

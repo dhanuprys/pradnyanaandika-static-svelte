@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import type { Product } from '$lib/data/products/types';
+	import type { Product } from '$cms';
 
 	const { product }: { product: Product } = $props();
 

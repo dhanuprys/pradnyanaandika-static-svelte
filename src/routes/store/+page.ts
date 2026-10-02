@@ -1,4 +1,4 @@
-import { getAllProducts } from '$lib/data/products';
+import { getAllProducts } from '$cms';
 import type { PageLoad } from './$types';
 
 export const prerender = true;

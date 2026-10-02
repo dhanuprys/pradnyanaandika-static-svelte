@@ -1,5 +1,5 @@
-import { getAllPosts } from '$lib/data/blogs';
-import { getAllProducts } from '$lib/data/products';
+import { getAllPosts } from '$cms';
+import { getAllProducts } from '$cms';
 import type { PageLoad } from './$types';
 
 export const prerender = true;

@@ -19,6 +19,9 @@ export default defineConfig({
 					return true;
 				}
 			},
+			alias: {
+				$cms: './src/cms'
+			},
 			adapter: adapter(),
 			prerender: {
 				entries: ['*', '/blogs', '/rss.xml', '/sitemap.xml', '/store']

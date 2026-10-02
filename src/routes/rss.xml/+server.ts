@@ -1,5 +1,5 @@
-import { getAllPosts } from '$lib/data/blogs/index';
-import { SITE_CONFIG } from '$lib/config/site';
+import { getAllPosts } from '$cms';
+import { SITE_CONFIG } from '$cms/site';
 
 export const prerender = true;
 
@@ -26,8 +26,8 @@ export async function GET() {
 	const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Blog & Artikel - Dr. I Ketut Andika Pradnyana</title>
-		<description>Edukasi AI, VR Learning, Metodologi Penelitian, & Publikasi Scopus oleh Dr. I Ketut Andika Pradnyana</description>
+		<title>Blog & Artikel - I Ketut Andika Pradnyana</title>
+		<description>Edukasi AI, VR Learning, Metodologi Penelitian, & Publikasi Scopus oleh I Ketut Andika Pradnyana</description>
 		<link>${SITE_URL}/blogs</link>
 		<atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
 		<language>id</language>

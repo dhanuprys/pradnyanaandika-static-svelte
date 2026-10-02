@@ -6,7 +6,7 @@
 	import { Toaster } from 'svelte-sonner';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { getPersonSchema, getOrganizationSchema } from '$lib/config/site';
+	import { getPersonSchema, getOrganizationSchema } from '$cms/site';
 
 	import ScrollToTop from '$lib/components/ui/ScrollToTop.svelte';
 
@@ -26,5 +26,16 @@
 	</main>
 	<Footer />
 	<ScrollToTop />
-	<Toaster position="top-right" richColors />
+	<Toaster
+		position="bottom-right"
+		expand={false}
+		toastOptions={{
+			classes: {
+				toast:
+					'group flex w-full items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-[0_8px_30px_rgb(0,0,0,0.08)] font-sans text-slate-800',
+				title: 'text-sm font-bold text-slate-900',
+				description: 'text-xs text-slate-500 mt-0.5'
+			}
+		}}
+	/>
 </div>

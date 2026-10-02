@@ -1,6 +1,6 @@
-import { getAllPosts } from '$lib/data/blogs/index';
-import { getAllProducts } from '$lib/data/products/index';
-import { SITE_CONFIG } from '$lib/config/site';
+import { getAllPosts } from '$cms';
+import { getAllProducts } from '$cms';
+import { SITE_CONFIG } from '$cms/site';
 
 export const prerender = true;
 

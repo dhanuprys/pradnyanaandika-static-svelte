@@ -1,0 +1,24 @@
+---
+title: "VR BioSim - Lab Biologi Virtual Imersif"
+status: "Beta"
+techStack:
+  - "WebXR"
+  - "Three.js"
+  - "Unity 3D"
+  - "WebAssembly"
+description: "Simulasi laboratorium biologi virtual yang memungkinkan mahasiswa melakukan eksperimen seluler tanpa perangkat keras laboratorium fisik yang mahal."
+image: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+demoUrl: "https://wa.me/6281338005074"
+features:
+  - "Interaksi Objek 3D 360 Derajat di Web Browser"
+  - "Kuis Pembelajaran Berbasis Gamelan & Gamifikasi"
+  - "Dukungan Headset VR Mobile & Desktop"
+  - "Simulasi Real-time dengan Hukum Fisika & Kimia"
+  - "Perekaman aktivitas lab (Log Praktikum)"
+---
+
+VR BioSim dikembangkan untuk mendemokratisasi akses terhadap pengalaman laboratorium praktis tingkat lanjut, yang seringkali dibatasi oleh anggaran peralatan dan ketersediaan bahan habis pakai.
+
+Aplikasi ini berjalan sepenuhnya di browser melalui WebXR, memungkinkan siswa dengan kacamata VR berbasis ponsel pintar yang murah (seperti Google Cardboard) atau perangkat layar sentuh biasa untuk berpartisipasi dalam lingkungan seluler 3D yang sangat interaktif.
+
+Pengguna dapat mengeksplorasi organel mikroskopis, memanipulasi variabel suhu/pH secara real-time, dan memvisualisasikan proses osmosis dengan fidelitas tinggi. Terdapat pula sistem evaluasi berbasis permainan gamifikasi (Gamelan) untuk meningkatkan motivasi belajar.

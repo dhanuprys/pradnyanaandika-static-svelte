@@ -1,4 +1,4 @@
-import { getAllPosts } from '$lib/data/blogs/index';
+import { getAllPosts } from '$cms';
 
 export const prerender = true;
 

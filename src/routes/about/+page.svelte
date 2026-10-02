@@ -1,25 +1,20 @@
 <script lang="ts">
 	import {
 		GraduationCap,
-		UserCheck,
 		Award,
-		Target,
 		User,
 		Briefcase,
 		Trophy,
-		Users,
 		FileText,
 		ArrowRight,
 		Send,
-		Download,
-		ShieldCheck,
-		Cpu,
-		BookOpen
+		Download
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
+	import { aboutConfig } from '$cms/pages';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG, getPersonSchema } from '$lib/config/site';
+	import { SITE_CONFIG, getPersonSchema } from '$cms/site';
 
 	const tabs = [
 		{ id: 'profil', label: 'Profil', icon: User },
@@ -27,25 +22,40 @@
 		{ id: 'pengalaman', label: 'Pengalaman', icon: Briefcase },
 		{ id: 'sertifikasi', label: 'Sertifikasi', icon: Award },
 		{ id: 'prestasi', label: 'Prestasi', icon: Trophy },
-		{ id: 'organisasi', label: 'Organisasi', icon: Users },
 		{ id: 'cv', label: 'CV', icon: FileText }
 	];
 
 	let activeTab = $state('profil');
+	let highlightedSection = $state<string | null>(null);
+
+	function scrollToSection(id: string) {
+		activeTab = id;
+		const el = document.getElementById(`section-${id}`);
+		if (el) {
+			const yOffset = -120; // Offset for header/tabs
+			const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
+			window.scrollTo({ top: y, behavior: 'smooth' });
+
+			highlightedSection = id;
+			setTimeout(() => {
+				highlightedSection = null;
+			}, 1500);
+		}
+	}
 
 	const profileSchema = {
 		'@context': 'https://schema.org',
 		'@type': 'ProfilePage',
 		'@id': `${SITE_CONFIG.url}/about`,
-		name: 'Profil & Biografi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd.',
+		name: 'Profil & Biografi I Ketut Andika Pradnyana, S.Pd., M.Pd.',
 		url: `${SITE_CONFIG.url}/about`,
 		mainEntity: getPersonSchema()
 	};
 </script>
 
 <SEO
-	title="Profil Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. | Andika Academy"
-	description="Biografi lengkap, riwayat pendidikan, publikasi ilmiah Scopus, sertifikasi, & prestasi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. Pakar Teknopedagogi & AI Education."
+	title="Profil I Ketut Andika Pradnyana, S.Pd., M.Pd. | Andika Academy"
+	description="Biografi lengkap, riwayat pendidikan, publikasi ilmiah Scopus, sertifikasi, & prestasi I Ketut Andika Pradnyana, S.Pd., M.Pd. Pakar Teknopedagogi & AI Education."
 	canonical="{SITE_CONFIG.url}/about"
 	type="profile"
 	jsonLd={profileSchema}
@@ -70,8 +80,8 @@
 				<!-- Persona Image (Left side on desktop, bottom on mobile) -->
 				<div class="flex w-full shrink-0 items-end justify-center lg:w-auto lg:justify-start">
 					<img
-						src={resolve('/images/andika.png')}
-						alt="Dr. I Ketut Andika"
+						src={aboutConfig.hero.image}
+						alt={aboutConfig.hero.name}
 						class="h-auto max-h-[340px] w-auto object-contain object-bottom drop-shadow-2xl sm:max-h-[480px] lg:max-h-[620px]"
 					/>
 				</div>
@@ -81,7 +91,7 @@
 					<h1
 						class="mb-1 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
 					>
-						Tentang Saya
+						{aboutConfig.hero.title}
 					</h1>
 
 					<!-- Breadcrumb -->
@@ -94,53 +104,45 @@
 					</nav>
 
 					<h2 class="mb-1 text-base font-bold text-blue-400 sm:text-xl">
-						Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd.
+						{aboutConfig.hero.name}
 					</h2>
 					<p class="mb-4 text-xs font-semibold tracking-wide text-slate-300 uppercase sm:text-sm">
-						Educational Technology Researcher & Lecturer
+						{aboutConfig.hero.role}
 					</p>
 					<p
 						class="mx-auto mb-8 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base lg:mx-0"
 					>
-						Saya adalah dosen, peneliti, dan inovator di bidang teknologi pendidikan yang berfokus
-						pada pengembangan Artificial Intelligence, Virtual Reality, dan media pembelajaran
-						inovatif untuk transformasi pendidikan.
+						{aboutConfig.hero.description}
 					</p>
 
 					<!-- External Badges Row -->
 					<div
 						class="flex flex-wrap items-center justify-center gap-3 text-xs font-medium text-slate-300 lg:justify-start"
 					>
-						<div
-							class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xs"
-						>
-							<GraduationCap class="h-4 w-4 text-blue-400" />
-							<span>Google Scholar</span>
-						</div>
-						<div
-							class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xs"
-						>
-							<span class="rounded bg-blue-600 px-1 py-0.5 text-[10px] font-bold text-white"
-								>SINTA</span
+						{#each aboutConfig.hero.badges as badge (badge.name)}
+							<svelte:element
+								this={badge.url && badge.url !== '#' ? 'a' : 'div'}
+								href={badge.url !== '#' ? badge.url : undefined}
+								target={badge.url !== '#' ? '_blank' : undefined}
+								rel={badge.url !== '#' ? 'noopener noreferrer' : undefined}
+								class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xs transition-colors hover:bg-white/10"
 							>
-							<span>SINTA</span>
-						</div>
-						<div
-							class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xs"
-						>
-							<span class="rounded bg-white px-1 py-0.5 text-[10px] font-bold text-emerald-600"
-								>ID</span
-							>
-							<span>ORCID</span>
-						</div>
-						<div
-							class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-xs"
-						>
-							<span class="rounded bg-teal-500 px-1 py-0.5 text-[10px] font-bold text-white"
-								>R&supE;</span
-							>
-							<span>ResearchGate</span>
-						</div>
+								{#if badge.svg}
+									<div class="h-4 w-4 text-blue-400 [&>svg]:h-full [&>svg]:w-full">
+										<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+										{@html badge.svg}
+									</div>
+								{:else if badge.label}
+									<span
+										class="rounded {badge.labelBg} px-1 py-0.5 text-[10px] font-bold {badge.labelColor}"
+										>{badge.label}</span
+									>
+								{:else if badge.icon}
+									<badge.icon class="h-4 w-4 text-blue-400" />
+								{/if}
+								<span>{badge.name}</span>
+							</svelte:element>
+						{/each}
 					</div>
 				</div>
 			</div>
@@ -152,61 +154,20 @@
 		<div
 			class="grid grid-cols-1 gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-xl sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-gray-100"
 		>
-			<!-- Card 1: Pendidikan -->
-			<div class="flex items-center gap-4 p-3 lg:px-6">
-				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
-				>
-					<GraduationCap class="h-6 w-6" />
+			{#each aboutConfig.highlights as highlight (highlight.title)}
+				<div class="flex items-center gap-4 p-3 lg:px-6">
+					<div
+						class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
+					>
+						<highlight.icon class="h-6 w-6" />
+					</div>
+					<div>
+						<h3 class="text-sm font-bold text-slate-900">{highlight.title}</h3>
+						<p class="text-xs text-slate-500">{highlight.subtitle1}</p>
+						<p class="text-[11px] text-slate-400">{highlight.subtitle2}</p>
+					</div>
 				</div>
-				<div>
-					<h3 class="text-sm font-bold text-slate-900">Pendidikan</h3>
-					<p class="text-xs text-slate-500">S3 Teknologi Pendidikan</p>
-					<p class="text-[11px] text-slate-400">Universitas Negeri Jakarta</p>
-				</div>
-			</div>
-
-			<!-- Card 2: Bidang Keahlian -->
-			<div class="flex items-center gap-4 p-3 lg:px-6">
-				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
-				>
-					<Cpu class="h-6 w-6" />
-				</div>
-				<div>
-					<h3 class="text-sm font-bold text-slate-900">Fokus Riset</h3>
-					<p class="text-xs text-slate-500">AI & VR Learning</p>
-					<p class="text-[11px] text-slate-400">Teknopedagogi Inovatif</p>
-				</div>
-			</div>
-
-			<!-- Card 3: Sertifikasi -->
-			<div class="flex items-center gap-4 p-3 lg:px-6">
-				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
-				>
-					<Award class="h-6 w-6" />
-				</div>
-				<div>
-					<h3 class="text-sm font-bold text-slate-900">Sertifikasi</h3>
-					<p class="text-xs text-slate-500">Asesor & Educator</p>
-					<p class="text-[11px] text-slate-400">Lisensi Profesional</p>
-				</div>
-			</div>
-
-			<!-- Card 4: Karya & HKI -->
-			<div class="flex items-center gap-4 p-3 lg:px-6">
-				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
-				>
-					<ShieldCheck class="h-6 w-6" />
-				</div>
-				<div>
-					<h3 class="text-sm font-bold text-slate-900">Publikasi & HKI</h3>
-					<p class="text-xs text-slate-500">Scopus & Hak Cipta</p>
-					<p class="text-[11px] text-slate-400">10+ Karya Terdaftar</p>
-				</div>
-			</div>
+			{/each}
 		</div>
 	</section>
 
@@ -218,7 +179,7 @@
 			>
 				{#each tabs as tab (tab.id)}
 					<button
-						onclick={() => (activeTab = tab.id)}
+						onclick={() => scrollToSection(tab.id)}
 						class="flex min-h-[44px] shrink-0 snap-start items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-all
 						{activeTab === tab.id
 							? 'bg-blue-600 text-white shadow-md'
@@ -238,100 +199,63 @@
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
 				<!-- Profil Singkat (6/12) -->
 				<div
-					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs sm:p-8 lg:col-span-6"
+					id="section-profil"
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition-all duration-700 sm:p-8 lg:col-span-6
+					{highlightedSection === 'profil' ? 'scale-[0.98] opacity-50 ring-2 ring-blue-400' : 'opacity-100'}"
 				>
 					<div>
 						<h3 class="mb-4 text-base font-bold text-slate-900 sm:text-lg">Profil Singkat</h3>
-						<p class="mb-4 text-xs leading-relaxed text-slate-600 sm:text-sm">
-							Saya memiliki ketertarikan besar pada integrasi teknologi canggih dalam pendidikan,
-							khususnya Artificial Intelligence, Virtual Reality, dan pembelajaran adaptif. Berbagai
-							penelitian dan inovasi yang saya lakukan bertujuan untuk menciptakan pengalaman
-							belajar yang lebih efektif, menarik, dan relevan dengan kebutuhan abad ke-21.
-						</p>
-						<p class="text-xs leading-relaxed text-slate-600 sm:text-sm">
-							Selain mengajar dan meneliti, saya aktif mengembangkan media pembelajaran digital,
-							menulis artikel ilmiah, serta berbagi pengetahuan melalui pelatihan dan workshop bagi
-							guru, dosen, dan praktisi pendidikan.
-						</p>
+						{#each aboutConfig.profile.paragraphs as paragraph, i (i)}
+							<p class="mb-4 text-xs leading-relaxed text-slate-600 sm:text-sm">
+								{paragraph}
+							</p>
+						{/each}
 					</div>
 					<div class="mt-8 border-t border-gray-100 pt-4">
-						<div class="font-serif text-2xl font-bold text-slate-800 italic">Andika</div>
-						<div class="mt-1 text-xs font-bold text-blue-600">
-							Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd.
+						<div class="font-serif text-2xl font-bold text-slate-800 italic">
+							{aboutConfig.profile.signature.name}
 						</div>
-						<div class="text-[11px] text-slate-400">Educational Technology Researcher</div>
+						<div class="mt-1 text-xs font-bold text-blue-600">
+							{aboutConfig.profile.signature.fullName}
+						</div>
+						<div class="text-[11px] text-slate-400">{aboutConfig.profile.signature.role}</div>
 					</div>
 				</div>
 
 				<!-- Pendidikan Timeline (6/12) -->
 				<div
-					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs sm:p-8 lg:col-span-6"
+					id="section-pendidikan"
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition-all duration-700 sm:p-8 lg:col-span-6
+					{highlightedSection === 'pendidikan'
+						? 'scale-[0.98] opacity-50 ring-2 ring-blue-400'
+						: 'opacity-100'}"
 				>
 					<div>
 						<h3 class="mb-6 text-base font-bold text-slate-900 sm:text-lg">Pendidikan</h3>
 						<div class="relative space-y-6 border-l-2 border-blue-600 pl-6">
-							<!-- Item 1 -->
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="flex items-start justify-between gap-4">
-									<div>
-										<div class="text-xs font-semibold text-slate-400">2020 &ndash; 2024</div>
-										<h4 class="text-sm font-bold text-slate-900 sm:text-base">
-											Doktor Teknologi Pendidikan
-										</h4>
-										<p class="text-xs text-slate-500">Universitas Negeri Jakarta</p>
-									</div>
-									<div
-										class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700"
-									>
-										UNJ
-									</div>
-								</div>
-							</div>
-
-							<!-- Item 2 -->
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="flex items-start justify-between gap-4">
-									<div>
-										<div class="text-xs font-semibold text-slate-400">2016 &ndash; 2018</div>
-										<h4 class="text-sm font-bold text-slate-900 sm:text-base">
-											Magister Teknologi Pendidikan
-										</h4>
-										<p class="text-xs text-slate-500">Universitas Negeri Jakarta</p>
-									</div>
-									<div
-										class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700"
-									>
-										UNJ
+							{#each aboutConfig.education as edu (edu.title)}
+								<div class="relative">
+									<span
+										class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
+									></span>
+									<div class="flex items-start justify-between gap-4">
+										<div>
+											<div class="text-xs font-semibold text-slate-400">{edu.year}</div>
+											<h4 class="text-sm font-bold text-slate-900 sm:text-base">
+												{edu.title}
+											</h4>
+											<p class="text-xs text-slate-500">{edu.subtitle}</p>
+										</div>
+										{#if edu.abbreviation}
+											<div
+												class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700"
+											>
+												{edu.abbreviation}
+											</div>
+										{/if}
 									</div>
 								</div>
-							</div>
-
-							<!-- Item 3 -->
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="flex items-start justify-between gap-4">
-									<div>
-										<div class="text-xs font-semibold text-slate-400">2010 &ndash; 2014</div>
-										<h4 class="text-sm font-bold text-slate-900 sm:text-base">
-											Sarjana Pendidikan
-										</h4>
-										<p class="text-xs text-slate-500">Universitas Pendidikan Ganesha</p>
-									</div>
-									<div
-										class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700"
-									>
-										UNDIKSHA
-									</div>
-								</div>
-							</div>
+							{/each}
 						</div>
 					</div>
 
@@ -354,35 +278,25 @@
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 				<!-- Col 1: Pengalaman Mengajar -->
 				<div
-					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+					id="section-pengalaman"
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition-all duration-700
+					{highlightedSection === 'pengalaman'
+						? 'scale-[0.98] opacity-50 ring-2 ring-blue-400'
+						: 'opacity-100'}"
 				>
 					<div>
 						<h3 class="mb-6 text-base font-bold text-slate-900">Pengalaman Mengajar</h3>
 						<div class="relative space-y-5 border-l-2 border-blue-600 pl-6">
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="text-xs text-slate-400">2018 &ndash; Sekarang</div>
-								<h4 class="text-xs font-bold text-slate-900">Dosen Tetap</h4>
-								<p class="text-[11px] text-slate-500">Universitas Pendidikan Ganesha</p>
-							</div>
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="text-xs text-slate-400">2016 &ndash; 2018</div>
-								<h4 class="text-xs font-bold text-slate-900">Dosen Luar Biasa</h4>
-								<p class="text-[11px] text-slate-500">Universitas Pendidikan Ganesha</p>
-							</div>
-							<div class="relative">
-								<span
-									class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
-								></span>
-								<div class="text-xs text-slate-400">2015 &ndash; 2016</div>
-								<h4 class="text-xs font-bold text-slate-900">Asisten Dosen</h4>
-								<p class="text-[11px] text-slate-500">Universitas Pendidikan Ganesha</p>
-							</div>
+							{#each aboutConfig.experience as exp (exp.title)}
+								<div class="relative">
+									<span
+										class="absolute top-1.5 -left-[31px] h-3 w-3 rounded-full border-2 border-white bg-blue-600"
+									></span>
+									<div class="text-xs text-slate-400">{exp.year}</div>
+									<h4 class="text-xs font-bold text-slate-900">{exp.title}</h4>
+									<p class="text-[11px] text-slate-500">{exp.subtitle}</p>
+								</div>
+							{/each}
 						</div>
 					</div>
 					<div class="mt-6 pt-2">
@@ -397,57 +311,28 @@
 
 				<!-- Col 2: Sertifikasi & Pelatihan -->
 				<div
-					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+					id="section-sertifikasi"
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition-all duration-700
+					{highlightedSection === 'sertifikasi'
+						? 'scale-[0.98] opacity-50 ring-2 ring-blue-400'
+						: 'opacity-100'}"
 				>
 					<div>
 						<h3 class="mb-6 text-base font-bold text-slate-900">Sertifikasi & Pelatihan</h3>
 						<div class="space-y-4">
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
-								>
-									<ShieldCheck class="h-4 w-4" />
+							{#each aboutConfig.certifications as cert (cert.title)}
+								<div class="flex items-start gap-3">
+									<div
+										class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+									>
+										<cert.icon class="h-4 w-4" />
+									</div>
+									<div>
+										<h4 class="text-xs font-bold text-slate-900">{cert.title}</h4>
+										<p class="text-[11px] text-slate-500">{cert.subtitle}</p>
+									</div>
 								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">AI for Education</h4>
-									<p class="text-[11px] text-slate-500">IBM SkillsBuild (2024)</p>
-								</div>
-							</div>
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
-								>
-									<Award class="h-4 w-4" />
-								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">
-										Google Certified Educator Level 1 & 2
-									</h4>
-									<p class="text-[11px] text-slate-500">Google (2023)</p>
-								</div>
-							</div>
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
-								>
-									<Cpu class="h-4 w-4" />
-								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">Virtual Reality for Learning</h4>
-									<p class="text-[11px] text-slate-500">Meta Learning (2023)</p>
-								</div>
-							</div>
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
-								>
-									<Target class="h-4 w-4" />
-								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">Instructional Design</h4>
-									<p class="text-[11px] text-slate-500">ATD (2022)</p>
-								</div>
-							</div>
+							{/each}
 						</div>
 					</div>
 					<div class="mt-6 pt-2">
@@ -462,46 +347,28 @@
 
 				<!-- Col 3: Prestasi -->
 				<div
-					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs"
+					id="section-prestasi"
+					class="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-xs transition-all duration-700
+					{highlightedSection === 'prestasi'
+						? 'scale-[0.98] opacity-50 ring-2 ring-blue-400'
+						: 'opacity-100'}"
 				>
 					<div>
 						<h3 class="mb-6 text-base font-bold text-slate-900">Prestasi</h3>
 						<div class="space-y-4">
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500"
-								>
-									<Trophy class="h-4 w-4" />
+							{#each aboutConfig.achievements as achievement (achievement.title)}
+								<div class="flex items-start gap-3">
+									<div
+										class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500"
+									>
+										<achievement.icon class="h-4 w-4" />
+									</div>
+									<div>
+										<h4 class="text-xs font-bold text-slate-900">{achievement.title}</h4>
+										<p class="text-[11px] text-slate-500">{achievement.subtitle}</p>
+									</div>
 								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">Peneliti Terproduktif</h4>
-									<p class="text-[11px] text-slate-500">Universitas Pendidikan Ganesha (2023)</p>
-								</div>
-							</div>
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500"
-								>
-									<Trophy class="h-4 w-4" />
-								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">
-										Penerima Hibah Penelitian Kompetitif
-									</h4>
-									<p class="text-[11px] text-slate-500">Kemdikbudristek (2022)</p>
-								</div>
-							</div>
-							<div class="flex items-start gap-3">
-								<div
-									class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500"
-								>
-									<Trophy class="h-4 w-4" />
-								</div>
-								<div>
-									<h4 class="text-xs font-bold text-slate-900">Inovator Pembelajaran Digital</h4>
-									<p class="text-[11px] text-slate-500">LLDIKTI Wilayah VIII (2021)</p>
-								</div>
-							</div>
+							{/each}
 						</div>
 					</div>
 					<div class="mt-6 pt-2">
@@ -517,84 +384,19 @@
 		</div>
 	</section>
 
-	<!-- Keanggotaan Profesional Section -->
-	<section class="mb-8">
-		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<h3 class="mb-4 text-base font-bold text-slate-900 sm:text-lg">Keanggotaan Profesional</h3>
-			<div
-				class="grid grid-cols-1 items-center gap-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-xs lg:grid-cols-12"
-			>
-				<!-- Associations list (8/12) -->
-				<div class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:col-span-8">
-					<div class="flex items-center gap-2 rounded-xl border border-gray-100 bg-slate-50 p-3">
-						<div
-							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-xs font-bold text-white"
-						>
-							ATPI
-						</div>
-						<div class="text-[10px] leading-tight font-semibold text-slate-700">
-							Asosiasi Teknologi Pendidikan Indonesia
-						</div>
-					</div>
-
-					<div class="flex items-center gap-2 rounded-xl border border-gray-100 bg-slate-50 p-3">
-						<div
-							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-600 text-xs font-bold text-white"
-						>
-							APPI
-						</div>
-						<div class="text-[10px] leading-tight font-semibold text-slate-700">
-							Asosiasi Profesi Pendidik Indonesia
-						</div>
-					</div>
-
-					<div class="flex items-center gap-2 rounded-xl border border-gray-100 bg-slate-50 p-3">
-						<div
-							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-xs font-bold text-white"
-						>
-							APPI
-						</div>
-						<div class="text-[10px] leading-tight font-semibold text-slate-700">
-							Asosiasi Peneliti Pendidikan Indonesia
-						</div>
-					</div>
-
-					<div class="flex items-center gap-2 rounded-xl border border-gray-100 bg-slate-50 p-3">
-						<div
-							class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-rose-600 text-[9px] font-bold text-white"
-						>
-							IAFOR
-						</div>
-						<div class="text-[10px] leading-tight font-semibold text-slate-700">
-							IAFOR (International Academic Forum)
-						</div>
-					</div>
-				</div>
-
-				<!-- Speaker photo on right (4/12) -->
-				<div class="lg:col-span-4">
-					<img
-						src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-						alt="Dr. Andika Presentation at Academic Conference"
-						class="h-36 w-full rounded-xl object-cover shadow-sm"
-					/>
-				</div>
-			</div>
-		</div>
-	</section>
-
 	<!-- CTA Banner Section -->
-	<section class="pb-8">
+	<section class="pb-8" id="section-cv">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div
-				class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-primary-950 p-6 text-white shadow-md sm:flex-row sm:p-8"
+				class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-primary-950 p-6 text-white shadow-md transition-all duration-700 sm:flex-row sm:p-8
+				{highlightedSection === 'cv' ? 'scale-[0.98] opacity-50 ring-2 ring-blue-400' : 'opacity-100'}"
 			>
 				<div>
 					<h3 class="mb-1 text-lg font-bold text-white sm:text-xl">
-						Mari berkolaborasi untuk pendidikan yang lebih baik!
+						{aboutConfig.cta.title}
 					</h3>
 					<p class="text-xs text-slate-300 sm:text-sm">
-						Saya terbuka untuk kerja sama penelitian, pelatihan, dan proyek inovasi pendidikan.
+						{aboutConfig.cta.description}
 					</p>
 				</div>
 
@@ -606,7 +408,9 @@
 						Hubungi Saya <Send class="h-4 w-4" />
 					</a>
 					<a
-						href="#"
+						href={SITE_CONFIG.author.cvUrl}
+						target="_blank"
+						rel="external"
 						class="flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-xs font-bold text-slate-900 shadow-xs transition-colors hover:bg-slate-100 sm:text-sm"
 					>
 						Unduh CV <Download class="h-4 w-4" />

@@ -1,25 +1,6 @@
 <script lang="ts">
-	import type { Product } from '$lib/data/products/types';
-	import {
-		ArrowLeft,
-		Check,
-		ShieldCheck,
-		Zap,
-		MessageCircle,
-		ShoppingCart,
-		ShoppingBag,
-		Star,
-		Share2,
-		Sparkles,
-		FileText,
-		DownloadCloud,
-		Headphones,
-		ChevronLeft,
-		ChevronRight,
-		Maximize2,
-		X,
-		ArrowRight
-	} from '@lucide/svelte';
+	import type { Product } from '$cms';
+	import { ArrowLeft, Star, ChevronRight, X, ArrowRight, Minus, Plus } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import ProductCard from '$lib/components/ui/ProductCard.svelte';
 	import { cart } from '$lib/stores/cart.svelte';
@@ -33,12 +14,19 @@
 		relatedProducts?: Product[];
 	} = $props();
 
-	// Active image gallery slideshow state
 	let activeImageIndex = $state(0);
-	let copied = $state(false);
 	let isLightboxOpen = $state(false);
+	let quantity = $state(1);
 
 	const formattedPrice = $derived(
+		new Intl.NumberFormat('id-ID', {
+			style: 'currency',
+			currency: product.currency,
+			maximumFractionDigits: 0
+		}).format(product.price * quantity)
+	);
+
+	const unitPrice = $derived(
 		new Intl.NumberFormat('id-ID', {
 			style: 'currency',
 			currency: product.currency,
@@ -46,29 +34,12 @@
 		}).format(product.price)
 	);
 
-	function nextImage() {
-		activeImageIndex = (activeImageIndex + 1) % product.images.length;
-	}
-
-	function prevImage() {
-		activeImageIndex = (activeImageIndex - 1 + product.images.length) % product.images.length;
-	}
-
-	// WhatsApp direct buy link
 	const whatsappUrl = $derived.by(() => {
 		const text = encodeURIComponent(
-			`Halo Dr. Andika, saya berminat untuk membeli produk "${product.name}" (${formattedPrice}). Mohon info prosedur pembayarannya.`
+			`Halo Andika, saya berminat untuk membeli produk "${product.name}" (${formattedPrice}). Mohon info prosedur pembayarannya.`
 		);
 		return `https://wa.me/6281338005074?text=${text}`;
 	});
-
-	function copyLink() {
-		if (typeof window !== 'undefined') {
-			navigator.clipboard.writeText(window.location.href);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
-		}
-	}
 
 	function addToCart() {
 		cart.add({
@@ -78,366 +49,340 @@
 			image: product.images[0]
 		});
 		toast.success('Berhasil ditambahkan', {
-			description: `${product.name} telah ditambahkan ke keranjang.`
+			description: `${quantity} ${product.name} telah ditambahkan ke keranjang.`
 		});
 	}
 </script>
 
-<div class="bg-slate-50/50 py-8 text-slate-800">
+<div class="bg-white py-8 text-slate-800">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<!-- Top Breadcrumb & Back Navigation -->
-		<div
-			class="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200/80 pb-4"
-		>
-			<a
-				href={resolve('/store')}
-				class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-xs transition-all hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+		<!-- Top Breadcrumb -->
+		<nav class="mb-8 flex items-center gap-2 text-xs text-slate-500">
+			<a href={resolve('/store')} class="inline-flex items-center gap-1 hover:text-blue-600"
+				><ArrowLeft class="h-3 w-3" /> Back</a
 			>
-				<ArrowLeft class="h-4 w-4" /> Kembali ke Store
-			</a>
-
-			<nav class="flex items-center gap-2 text-xs text-slate-500">
-				<a href={resolve('/')} class="hover:text-blue-600">Home</a>
-				<span>/</span>
-				<a href={resolve('/store')} class="hover:text-blue-600">Academy Store</a>
-				<span>/</span>
-				<span class="max-w-[200px] truncate font-medium text-slate-900 sm:max-w-xs"
-					>{product.name}</span
-				>
-			</nav>
-		</div>
+			<span class="mx-2 h-3 border-l border-gray-300"></span>
+			<a href={resolve('/')} class="hover:text-blue-600">Home</a>
+			<span>/</span>
+			<a href={resolve('/store')} class="hover:text-blue-600">Store</a>
+			<span>/</span>
+			<span class="max-w-[200px] truncate font-medium text-slate-900 sm:max-w-xs"
+				>{product.name}</span
+			>
+		</nav>
 
 		<!-- Main Product Hero Section -->
-		<div class="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
-			<!-- Left Column: Multi-Image E-Commerce Gallery -->
-			<div class="lg:col-span-6">
-				<div class="sticky top-24 space-y-4">
-					<!-- Main Image Container -->
+		<div class="mb-10 grid grid-cols-1 gap-10 lg:grid-cols-12">
+			<!-- Left: Images Gallery (Vertical Thumbnails + Main Image) -->
+			<div class="flex h-auto flex-col gap-4 sm:h-[500px] sm:flex-row lg:col-span-7">
+				<!-- Vertical Thumbnails -->
+				{#if product.images.length > 1}
 					<div
-						class="group relative aspect-4/3 w-full overflow-hidden rounded-3xl border border-gray-200/80 bg-white p-2 shadow-sm"
+						class="no-scrollbar order-2 flex w-full shrink-0 gap-3 overflow-y-auto sm:order-1 sm:w-20 sm:flex-col"
 					>
-						<!-- Badge Overlay -->
-						<span
-							class="absolute top-4 left-4 z-10 inline-flex items-center gap-1 rounded-lg bg-blue-600/90 px-3 py-1 text-[11px] font-bold text-white shadow-xs backdrop-blur-xs"
-						>
-							<Sparkles class="h-3 w-3" /> Digital Asset
-						</span>
-
-						<!-- Photo Counter Badge -->
-						{#if product.images.length > 1}
-							<span
-								class="absolute top-4 right-4 z-10 rounded-lg bg-slate-900/70 px-2.5 py-1 text-[11px] font-extrabold text-white backdrop-blur-xs"
-							>
-								{activeImageIndex + 1} / {product.images.length}
-							</span>
-						{/if}
-
-						<!-- Main Image Preview -->
-						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-						<button
-							onclick={() => (isLightboxOpen = true)}
-							class="h-full w-full cursor-zoom-in overflow-hidden rounded-2xl focus:outline-none"
-						>
-							<img
-								src={product.images[activeImageIndex]}
-								alt={product.name}
-								class="h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-105"
-							/>
-							<div
-								class="absolute inset-0 flex items-center justify-center bg-slate-900/20 opacity-0 transition-opacity group-hover:opacity-100"
-							>
-								<span
-									class="inline-flex items-center gap-1.5 rounded-xl bg-white/90 px-3.5 py-2 text-xs font-bold text-slate-900 shadow-md backdrop-blur-xs"
-								>
-									<Maximize2 class="h-3.5 w-3.5" /> Perbesar Foto
-								</span>
-							</div>
-						</button>
-
-						<!-- Next / Prev Controls -->
-						{#if product.images.length > 1}
+						{#each product.images as image, i (i)}
 							<button
-								onclick={prevImage}
-								class="absolute top-1/2 left-4 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/80 bg-white/90 text-slate-800 shadow-md backdrop-blur-xs transition-transform hover:scale-110"
-								aria-label="Foto sebelumnya"
+								onclick={() => (activeImageIndex = i)}
+								class="relative aspect-square w-16 shrink-0 overflow-hidden rounded-xl border-2 transition-all sm:w-full
+                                {activeImageIndex === i
+									? 'border-blue-600 ring-2 ring-blue-500/20'
+									: 'border-transparent opacity-70 hover:border-gray-200 hover:opacity-100'}"
 							>
-								<ChevronLeft class="h-5 w-5" />
+								<img src={image} alt="" class="h-full w-full object-cover" />
 							</button>
-							<button
-								onclick={nextImage}
-								class="absolute top-1/2 right-4 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/80 bg-white/90 text-slate-800 shadow-md backdrop-blur-xs transition-transform hover:scale-110"
-								aria-label="Foto selanjutnya"
-							>
-								<ChevronRight class="h-5 w-5" />
-							</button>
-						{/if}
-
-						<!-- Image Caption Label -->
-						{#if product.imageCaptions && product.imageCaptions[activeImageIndex]}
-							<div
-								class="absolute right-4 bottom-4 left-4 z-10 rounded-xl bg-slate-900/80 px-3.5 py-2 text-center text-xs font-medium text-white backdrop-blur-xs"
-							>
-								{product.imageCaptions[activeImageIndex]}
-							</div>
-						{/if}
+						{/each}
 					</div>
+				{/if}
 
-					<!-- Thumbnail Selector Grid -->
+				<!-- Main Image -->
+				<div
+					class="relative order-1 h-full w-full overflow-hidden rounded-[2rem] border border-gray-100 bg-gray-50 sm:order-2"
+				>
+					<button
+						onclick={() => (isLightboxOpen = true)}
+						class="h-full w-full cursor-zoom-in focus:outline-none"
+					>
+						<img
+							src={product.images[activeImageIndex]}
+							alt={product.name}
+							class="h-full w-full object-cover sm:object-contain"
+						/>
+					</button>
+					<!-- Badges -->
 					{#if product.images.length > 1}
-						<div class="no-scrollbar flex overflow-x-auto gap-2 pb-1 sm:grid sm:grid-cols-4 sm:gap-3 snap-x">
-							{#each product.images as image, i (i)}
-								<button
-									onclick={() => (activeImageIndex = i)}
-									class="relative h-16 w-16 shrink-0 aspect-square overflow-hidden rounded-xl border-2 transition-all snap-start sm:h-auto sm:w-auto sm:shrink
-									{activeImageIndex === i
-										? 'border-blue-600 shadow-xs ring-2 ring-blue-500/20'
-										: 'border-gray-200 opacity-70 hover:opacity-100'}"
-								>
-									<img src={image} alt="" class="h-full w-full object-cover" />
-									{#if product.imageCaptions && product.imageCaptions[i]}
-										<span class="sr-only">{product.imageCaptions[i]}</span>
-									{/if}
-								</button>
-							{/each}
-						</div>
+						<span
+							class="absolute right-4 bottom-4 z-10 rounded-full bg-slate-900/40 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md"
+						>
+							{activeImageIndex + 1}/{product.images.length}
+						</span>
 					{/if}
-
-					<!-- Fast Trust Cards -->
-					<div class="grid grid-cols-3 gap-3 pt-2">
-						<div
-							class="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-xs"
-						>
-							<DownloadCloud class="mb-1 h-5 w-5 text-blue-600" />
-							<span class="text-[11px] font-bold text-slate-900">Akses Instan</span>
-							<span class="text-[10px] text-slate-500">Langsung Download</span>
-						</div>
-						<div
-							class="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-xs"
-						>
-							<ShieldCheck class="mb-1 h-5 w-5 text-blue-600" />
-							<span class="text-[11px] font-bold text-slate-900">Materi Teruji</span>
-							<span class="text-[10px] text-slate-500">Standar Akademik</span>
-						</div>
-						<div
-							class="flex flex-col items-center rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-xs"
-						>
-							<Headphones class="mb-1 h-5 w-5 text-blue-600" />
-							<span class="text-[11px] font-bold text-slate-900">Dukungan 24/7</span>
-							<span class="text-[10px] text-slate-500">Panduan Penggunaan</span>
-						</div>
-					</div>
 				</div>
 			</div>
 
-			<!-- Right Column: Product Specs & Ordering -->
-			<div class="flex flex-col lg:col-span-6">
-				<!-- Category & Tags Header -->
-				<div class="mb-3 flex items-center gap-2">
-					<span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
-						ACADEMY RESOURCE
-					</span>
-					{#if product.tags && product.tags[0]}
-						<span
-							class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-wide text-slate-600 uppercase"
-						>
-							{product.tags[0]}
-						</span>
-					{/if}
-				</div>
-
+			<!-- Right: Product Info -->
+			<div class="flex flex-col py-2 lg:col-span-5">
 				<!-- Title -->
-				<h1
-					class="mb-3 text-2xl leading-tight font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl"
-				>
+				<h1 class="mb-2 text-3xl font-bold text-slate-900">
 					{product.name}
 				</h1>
 
-				<!-- Ratings & Reviews -->
-				<div class="mb-6 flex flex-wrap items-center gap-4 text-xs">
-					<div class="flex items-center gap-1 text-amber-400">
+				<!-- Ratings -->
+				<div class="mb-5 flex items-center gap-2 text-sm">
+					<div class="flex items-center gap-0.5 text-slate-900">
 						{#each [0, 1, 2, 3, 4] as i (i)}
 							<Star
-								class="h-4 w-4 {i < Math.floor(product.rating ?? 5)
+								class="h-3.5 w-3.5 {i < Math.floor(product.rating ?? 5)
 									? 'fill-current'
 									: 'text-gray-300'}"
 							/>
 						{/each}
-						<span class="ml-1 font-bold text-slate-800">{(product.rating ?? 5.0).toFixed(1)}</span>
 					</div>
-					<span class="text-slate-300">|</span>
-					<span class="font-medium text-slate-600">({product.reviewsCount ?? 50}+ Ulasan)</span>
-					<span class="text-slate-300">|</span>
-					<span class="inline-flex items-center gap-1 font-semibold text-emerald-600">
-						<Zap class="h-3.5 w-3.5" /> Stok Tersedia
-					</span>
+					<span class="font-bold text-slate-900">{(product.rating ?? 5.0).toFixed(2)}</span>
+					<span class="text-slate-500">({product.reviewsCount ?? 24})</span>
+					<span class="mx-1 text-slate-300">•</span>
+					<span class="text-slate-500">Digital Product</span>
 				</div>
 
-				<!-- Pricing Box -->
-				<div
-					class="mb-6 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50/80 to-indigo-50/50 p-5"
-				>
-					<div class="text-xs font-semibold tracking-wider text-slate-500 uppercase">
-						Harga Promo Akses Instan
-					</div>
-					<div class="mt-1 flex items-baseline gap-3">
-						<span class="text-3xl font-black text-blue-600 sm:text-4xl">{formattedPrice}</span>
+				<!-- Pricing -->
+				<div class="mb-8 flex flex-col gap-1">
+					<div class="flex items-center gap-3">
+						<span class="text-4xl font-extrabold text-slate-900">{unitPrice}</span>
 						{#if product.originalPrice}
-							<span class="text-sm font-medium text-slate-400 line-through">
+							<span class="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700">
+								-{Math.round((1 - product.price / product.originalPrice) * 100)}%
+							</span>
+							<span class="text-sm text-slate-400 line-through">
 								{new Intl.NumberFormat('id-ID', {
 									style: 'currency',
 									currency: product.currency,
 									maximumFractionDigits: 0
 								}).format(product.originalPrice)}
 							</span>
-							<span class="rounded-md bg-rose-100 px-2 py-0.5 text-xs font-extrabold text-rose-600">
-								Hemat {Math.round((1 - product.price / product.originalPrice) * 100)}%
-							</span>
 						{/if}
 					</div>
 				</div>
 
-				<!-- Short Description -->
-				<p class="mb-6 text-sm leading-relaxed text-slate-600">
-					{product.shortDescription}
-				</p>
+				<!-- Format / Category -->
+				<div class="mb-6">
+					<div class="mb-2 text-sm text-slate-500">
+						Kategori: <span class="font-semibold text-slate-900 uppercase">{product.category}</span>
+					</div>
+				</div>
 
-				<!-- Specifications Pills -->
-				{#if product.specifications}
-					<div class="mb-6 rounded-2xl border border-gray-100 bg-slate-50/80 p-4">
-						<h4 class="mb-2 text-xs font-extrabold tracking-wider text-slate-700 uppercase">
-							Spesifikasi File:
-						</h4>
-						<div class="flex flex-wrap gap-2 text-xs">
-							{#if product.specifications.fileFormat}
-								<span
-									class="rounded-lg border border-gray-200 bg-white px-2.5 py-1 font-semibold text-slate-700"
-								>
-									Format: {product.specifications.fileFormat.join(', ')}
-								</span>
-							{/if}
-							{#if product.specifications.fileSize}
-								<span
-									class="rounded-lg border border-gray-200 bg-white px-2.5 py-1 font-semibold text-slate-700"
-								>
-									Ukuran: {product.specifications.fileSize}
-								</span>
-							{/if}
-							{#if product.specifications.pageCount}
-								<span
-									class="rounded-lg border border-gray-200 bg-white px-2.5 py-1 font-semibold text-slate-700"
-								>
-									Halaman: {product.specifications.pageCount} Hlm
-								</span>
-							{/if}
-							{#if product.specifications.duration}
-								<span
-									class="rounded-lg border border-gray-200 bg-white px-2.5 py-1 font-semibold text-slate-700"
-								>
-									Durasi: {product.specifications.duration}
-								</span>
-							{/if}
-							{#if product.specifications.language}
-								<span
-									class="rounded-lg border border-gray-200 bg-white px-2.5 py-1 font-semibold text-slate-700"
-								>
-									Bahasa: {product.specifications.language}
-								</span>
-							{/if}
+				<!-- Quantity -->
+				<div class="mb-8">
+					<div class="mb-2 text-sm text-slate-500">
+						Quantity: <span class="font-semibold text-slate-900">{quantity}</span>
+					</div>
+					<div class="flex w-[120px] items-center rounded-full border border-gray-200 p-1">
+						<button
+							onclick={() => (quantity = Math.max(1, quantity - 1))}
+							class="flex h-8 w-8 items-center justify-center rounded-full text-slate-600 transition-colors hover:bg-slate-100"
+						>
+							<Minus class="h-4 w-4" />
+						</button>
+						<div class="flex-1 text-center text-sm font-semibold text-slate-900">
+							{quantity < 10 ? `0${quantity}` : quantity}
 						</div>
-					</div>
-				{/if}
-
-				<!-- Highlights list -->
-				{#if product.features && product.features.length > 0}
-					<div class="mb-8 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs">
-						<h3 class="mb-3 text-xs font-extrabold tracking-wider text-slate-900 uppercase">
-							Apa yang akan Anda Dapatkan:
-						</h3>
-						<ul class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-							{#each product.features as feature (feature)}
-								<li class="flex items-start gap-2.5 text-xs text-slate-700">
-									<div
-										class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white"
-									>
-										<Check class="h-3 w-3 stroke-[3]" />
-									</div>
-									<span>{feature}</span>
-								</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
-
-				<!-- Action Buttons -->
-				<div class="mt-auto space-y-3">
-					<div class="flex gap-3">
 						<button
-							onclick={addToCart}
-							class="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none"
+							onclick={() => quantity++}
+							class="flex h-8 w-8 items-center justify-center rounded-full text-slate-600 transition-colors hover:bg-slate-100"
 						>
-							<ShoppingCart class="h-5 w-5" /> Tambahkan ke Keranjang
+							<Plus class="h-4 w-4" />
 						</button>
-						<a
-							href={whatsappUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white shadow-md transition-all hover:bg-emerald-700 hover:shadow-lg focus:outline-none"
-							aria-label="Beli via WhatsApp"
-						>
-							<MessageCircle class="h-5 w-5 fill-current" />
-						</a>
 					</div>
+				</div>
 
-					<div class="flex gap-3">
-						<a
-							href={resolve('/contact')}
-							class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 shadow-xs transition-colors hover:bg-slate-50"
-						>
-							<FileText class="h-4 w-4 text-blue-600" /> Tanyakan Detail
-						</a>
-
-						<button
-							onclick={copyLink}
-							class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 shadow-xs transition-colors hover:bg-slate-50"
-						>
-							{#if copied}
-								<Check class="h-4 w-4 text-emerald-600" /> Tersalin
-							{:else}
-								<Share2 class="h-4 w-4 text-slate-500" /> Bagikan
-							{/if}
-						</button>
+				<!-- Delivery Info -->
+				<div class="mb-8 border-t border-gray-100 pt-6">
+					<div
+						class="flex items-center justify-between rounded-2xl border border-gray-200 bg-white px-4 py-3"
+					>
+						<span class="text-sm text-slate-500">
+							Pengiriman via <span class="font-bold text-slate-900">Instant Download</span>
+						</span>
+						<ChevronRight class="h-4 w-4 text-slate-400" />
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<!-- Detailed Description Section -->
-		<div class="mb-16 rounded-3xl border border-gray-100 bg-white p-6 shadow-xs sm:p-8 lg:p-10">
-			<h2 class="mb-4 border-b border-gray-100 pb-3 text-xl font-bold text-slate-900">
-				Deskripsi Lengkap & Materi
-			</h2>
-			<div
-				class="prose max-w-none text-sm leading-relaxed whitespace-pre-line text-slate-600 prose-slate"
-			>
-				{product.description}
+		<!-- Action Bar -->
+		<div
+			class="mb-12 flex flex-col items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:flex-row sm:p-6"
+		>
+			<div class="flex items-center gap-6">
+				<div class="text-sm font-medium text-slate-500">
+					Total Price: <span class="ml-2 text-lg font-bold text-slate-900">{formattedPrice}</span>
+				</div>
+			</div>
+
+			<div class="flex flex-wrap items-center justify-center gap-3">
+				<span
+					class="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-slate-600"
+					>{product.category.toUpperCase()}</span
+				>
+				<span
+					class="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-slate-600"
+					>Qty: {quantity}</span
+				>
+
+				<div class="ml-2 flex items-center gap-3">
+					<button
+						onclick={addToCart}
+						class="rounded-xl border border-slate-900 bg-white px-6 py-2.5 text-sm font-bold text-slate-900 transition-all hover:bg-slate-50"
+					>
+						Add to cart
+					</button>
+					<a
+						href={whatsappUrl}
+						target="_blank"
+						rel="noopener noreferrer external"
+						class="rounded-xl bg-blue-600 px-8 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg"
+					>
+						Buy Now
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Two columns bottom area: Item Details + Seller Info -->
+		<div class="mb-16 grid grid-cols-1 gap-8 lg:grid-cols-12">
+			<!-- Item Details -->
+			<div class="flex flex-col gap-6 lg:col-span-8">
+				<div
+					class="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] sm:p-8"
+				>
+					<h2 class="mb-6 text-xl font-bold text-slate-900">Item Details</h2>
+
+					<div class="grid grid-cols-1 gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
+						<div class="flex items-start">
+							<span class="w-28 text-slate-500">Category:</span>
+							<span class="font-medium text-slate-900 capitalize">{product.category}</span>
+						</div>
+						<div class="flex items-start">
+							<span class="w-28 text-slate-500">Stock:</span>
+							<span class="font-medium text-slate-900">{product.stock} items</span>
+						</div>
+
+						{#if product.specifications}
+							{#if product.specifications.fileFormat}
+								<div class="flex items-start">
+									<span class="w-28 text-slate-500">Format:</span>
+									<span class="font-medium text-slate-900"
+										>{product.specifications.fileFormat.join(', ')}</span
+									>
+								</div>
+							{/if}
+							{#if product.specifications.fileSize}
+								<div class="flex items-start">
+									<span class="w-28 text-slate-500">Size:</span>
+									<span class="font-medium text-slate-900">{product.specifications.fileSize}</span>
+								</div>
+							{/if}
+							{#if product.specifications.pageCount}
+								<div class="flex items-start">
+									<span class="w-28 text-slate-500">Pages:</span>
+									<span class="font-medium text-slate-900"
+										>{product.specifications.pageCount} Pages</span
+									>
+								</div>
+							{/if}
+							{#if product.specifications.duration}
+								<div class="flex items-start">
+									<span class="w-28 text-slate-500">Duration:</span>
+									<span class="font-medium text-slate-900">{product.specifications.duration}</span>
+								</div>
+							{/if}
+							{#if product.specifications.language}
+								<div class="flex items-start">
+									<span class="w-28 text-slate-500">Language:</span>
+									<span class="font-medium text-slate-900">{product.specifications.language}</span>
+								</div>
+							{/if}
+						{/if}
+					</div>
+
+					<div class="mt-8 border-t border-gray-100 pt-6">
+						<div class="prose max-w-none text-sm text-slate-600 prose-slate">
+							{product.description}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seller Info -->
+			<div class="flex flex-col gap-6 lg:col-span-4">
+				<!-- Social proof -->
+				<div
+					class="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]"
+				>
+					<div class="mb-4 flex items-center gap-[-8px]">
+						<!-- Dummy avatars -->
+						<div
+							class="relative z-30 h-8 w-8 rounded-full border-2 border-white bg-slate-200"
+						></div>
+						<div
+							class="relative z-20 -ml-3 h-8 w-8 rounded-full border-2 border-white bg-slate-300"
+						></div>
+						<div
+							class="relative z-10 -ml-3 h-8 w-8 rounded-full border-2 border-white bg-slate-400"
+						></div>
+					</div>
+					<p class="text-xs leading-relaxed text-slate-600">
+						Saved to wishlist by <span class="font-bold text-slate-900"
+							>katrine, jhon, markskot</span
+						>
+						and <span class="font-bold text-slate-900">212 others</span>
+					</p>
+					<button
+						class="mt-3 text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-4"
+					>
+						See all interested
+					</button>
+				</div>
+
+				<!-- Meet Seller -->
+				<div
+					class="rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]"
+				>
+					<div class="mb-4 flex items-center justify-between">
+						<h3 class="font-bold text-slate-900">Meet your author</h3>
+						<div class="text-slate-400">...</div>
+					</div>
+
+					<div class="flex items-center gap-3">
+						<div class="h-12 w-12 overflow-hidden rounded-full bg-slate-100">
+							<img
+								src="/images/andika.png"
+								alt="Author"
+								class="h-full w-full object-cover object-top"
+							/>
+						</div>
+						<div>
+							<div class="text-sm font-bold text-slate-900">I Ketut Andika Pradnyana</div>
+							<div class="text-xs text-slate-500">Academic & Researcher</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<!-- Related Products Section -->
 		{#if relatedProducts.length > 0}
 			<section class="mb-12">
-				<div class="mb-6 flex items-center justify-between border-b border-gray-200 pb-3">
-					<h2 class="text-xl font-bold text-slate-900">Produk Rekomendasi Lainnya</h2>
+				<div class="mb-6 flex items-center justify-between">
+					<h2 class="text-2xl font-bold text-slate-900">Produk Serupa</h2>
 					<a
 						href={resolve('/store')}
-						class="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
+						class="flex items-center gap-1 text-sm font-semibold text-blue-600 underline underline-offset-4 hover:text-blue-700"
 					>
 						Lihat Semua <ArrowRight class="h-4 w-4" />
 					</a>
 				</div>
 
-				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{#each relatedProducts as item (item.id)}
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+					{#each relatedProducts.slice(0, 4) as item (item.id)}
 						<ProductCard
 							image={item.images[0]}
 							title={item.name}
@@ -455,60 +400,6 @@
 				</div>
 			</section>
 		{/if}
-
-		<!-- Solid Blue CTA Banner -->
-		<div
-			class="flex flex-col items-center justify-between gap-6 rounded-2xl bg-blue-600 p-6 text-white shadow-md sm:flex-row sm:p-8"
-		>
-			<div class="flex items-center gap-4">
-				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white"
-				>
-					<ShoppingBag class="h-6 w-6" />
-				</div>
-				<div>
-					<h3 class="text-lg font-bold text-white sm:text-xl">
-						Butuh Pelatihan atau Konsultasi Khusus?
-					</h3>
-					<p class="text-xs text-blue-100 sm:text-sm">
-						Diskusi langsung bersama Dr. I Ketut Andika untuk bimbingan instansi dan penelitian.
-					</p>
-				</div>
-			</div>
-
-			<a
-				href={resolve('/contact')}
-				class="flex shrink-0 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-blue-600 shadow-xs transition-colors hover:bg-blue-50"
-			>
-				Hubungi Kami <MessageCircle class="h-4 w-4" />
-			</a>
-		</div>
-	</div>
-</div>
-
-<!-- Sticky Mobile Bottom Buy Bar -->
-<div
-	class="fixed bottom-0 inset-x-0 z-40 flex items-center justify-between gap-3 border-t border-slate-200/80 bg-white/95 px-4 py-3 shadow-2xl backdrop-blur-lg sm:hidden pb-safe"
->
-	<div>
-		<div class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Harga Total</div>
-		<div class="text-base font-black text-blue-600">{formattedPrice}</div>
-	</div>
-	<div class="flex gap-2">
-		<button
-			onclick={addToCart}
-			class="flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:bg-blue-700"
-		>
-			<ShoppingCart class="h-4 w-4" />
-		</button>
-		<a
-			href={whatsappUrl}
-			target="_blank"
-			rel="noopener noreferrer"
-			class="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-md transition-all active:scale-95 hover:bg-emerald-700"
-		>
-			<MessageCircle class="h-4 w-4 fill-current" /> Beli via WA
-		</a>
 	</div>
 </div>
 

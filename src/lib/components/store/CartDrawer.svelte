@@ -33,10 +33,8 @@
 
 	function checkoutViaWhatsApp() {
 		if (cart.items.length === 0) return;
-		const summary = cart.items
-			.map((item) => `- ${item.name} (${item.quantity}x)`)
-			.join('%0A');
-		const message = `Halo Dr. Andika, saya berminat untuk membeli produk berikut:%0A%0A${summary}%0A%0ATotal: ${formattedTotal}%0A%0AMohon instruksi pembayarannya.`;
+		const summary = cart.items.map((item) => `- ${item.name} (${item.quantity}x)`).join('%0A');
+		const message = `Halo Andika, saya berminat untuk membeli produk berikut:%0A%0A${summary}%0A%0ATotal: ${formattedTotal}%0A%0AMohon instruksi pembayarannya.`;
 		const waUrl = `https://wa.me/6281338005074?text=${message}`;
 		if (typeof window !== 'undefined') {
 			window.open(waUrl, '_blank');
@@ -70,25 +68,25 @@
 			</div>
 			<button
 				onclick={onClose}
-				class="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+				class="rounded-xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
 			>
 				<X class="h-5 w-5" />
 			</button>
 		</div>
 
 		<!-- Body Items List -->
-		<div class="flex-1 overflow-y-auto p-5 space-y-4">
+		<div class="flex-1 space-y-4 overflow-y-auto p-5">
 			{#if cart.items.length === 0}
-				<div class="flex flex-col items-center justify-center h-64 text-center">
-					<ShoppingBag class="h-16 w-16 text-slate-300 mb-3" />
+				<div class="flex h-64 flex-col items-center justify-center text-center">
+					<ShoppingBag class="mb-3 h-16 w-16 text-slate-300" />
 					<p class="text-sm font-bold text-slate-700">Keranjang Anda Kosong</p>
-					<p class="text-xs text-slate-500 mt-1 mb-4">
+					<p class="mt-1 mb-4 text-xs text-slate-500">
 						Jelajahi Academy Store untuk menemukan modul & produk pilihan.
 					</p>
 					<a
 						href={resolve('/store')}
 						onclick={onClose}
-						class="rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700 transition-colors"
+						class="rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-xs transition-colors hover:bg-blue-700"
 					>
 						Lihat Produk Store
 					</a>
@@ -99,37 +97,41 @@
 						<img
 							src={item.image}
 							alt={item.name}
-							class="h-20 w-20 shrink-0 rounded-xl object-cover border border-gray-100"
+							class="h-20 w-20 shrink-0 rounded-xl border border-gray-100 object-cover"
 						/>
 						<div class="flex flex-1 flex-col justify-between">
 							<div class="flex items-start justify-between gap-2">
-								<h3 class="text-xs font-bold text-slate-900 line-clamp-2 leading-tight">
+								<h3 class="line-clamp-2 text-xs leading-tight font-bold text-slate-900">
 									{item.name}
 								</h3>
 								<button
 									onclick={() => removeItem(item.id, item.name)}
-									class="text-slate-400 hover:text-rose-600 transition-colors"
+									class="text-slate-400 transition-colors hover:text-rose-600"
 								>
 									<Trash2 class="h-4 w-4" />
 								</button>
 							</div>
 
-							<div class="flex items-center justify-between mt-2">
+							<div class="mt-2 flex items-center justify-between">
 								<span class="text-xs font-bold text-blue-600">
-									{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.price)}
+									{new Intl.NumberFormat('id-ID', {
+										style: 'currency',
+										currency: 'IDR',
+										maximumFractionDigits: 0
+									}).format(item.price)}
 								</span>
 
 								<div class="flex items-center rounded-lg border border-gray-200 bg-white">
 									<button
 										onclick={() => updateQuantity(item.id, -1)}
-										class="px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-l-lg"
+										class="rounded-l-lg px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-100"
 									>
 										-
 									</button>
 									<span class="px-2 text-xs font-bold text-slate-800">{item.quantity}</span>
 									<button
 										onclick={() => updateQuantity(item.id, 1)}
-										class="px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-r-lg"
+										class="rounded-r-lg px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-100"
 									>
 										+
 									</button>
@@ -143,15 +145,17 @@
 
 		<!-- Footer Total & Checkout Button -->
 		{#if cart.items.length > 0}
-			<div class="border-t border-gray-100 p-5 bg-slate-50/50 space-y-4">
+			<div class="space-y-4 border-t border-gray-100 bg-slate-50/50 p-5">
 				<div class="flex items-center justify-between">
-					<span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Pembayaran</span>
+					<span class="text-xs font-bold tracking-wider text-slate-500 uppercase"
+						>Total Pembayaran</span
+					>
 					<span class="text-lg font-extrabold text-slate-900">{formattedTotal}</span>
 				</div>
 
 				<button
 					onclick={checkoutViaWhatsApp}
-					class="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 py-3.5 text-sm font-bold text-white shadow-md hover:bg-emerald-700 transition-colors"
+					class="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 py-3.5 text-sm font-bold text-white shadow-md transition-colors hover:bg-emerald-700"
 				>
 					Checkout via WhatsApp <ArrowRight class="h-4 w-4" />
 				</button>

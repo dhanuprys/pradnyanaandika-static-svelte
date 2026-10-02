@@ -1,4 +1,4 @@
-import { getProductById, getProductIds, getAllProducts } from '$lib/data/products';
+import { getProductById, getProductIds, getAllProducts } from '$cms';
 import { error } from '@sveltejs/kit';
 import type { EntryGenerator, PageLoad } from './$types';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ProductDetail from '$lib/components/store/ProductDetail.svelte';
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 	import type { PageData } from './$types';
 
 	const { data }: { data: PageData } = $props();
@@ -28,7 +28,7 @@
 </script>
 
 <SEO
-	title="{product.name} | Dr. I Ketut Andika Pradnyana"
+	title="{product.name} | I Ketut Andika Pradnyana"
 	description={product.shortDescription || product.description}
 	canonical="{SITE_CONFIG.url}/store/{product.id}"
 	type="product"

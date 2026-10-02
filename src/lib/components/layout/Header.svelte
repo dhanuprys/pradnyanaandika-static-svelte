@@ -94,7 +94,7 @@
 				<button
 					onclick={() => (isCartOpen = true)}
 					aria-label="Keranjang Belanja"
-					class="relative p-2 transition-all rounded-xl hover:bg-white/10 active:scale-95 {isDarkTheme
+					class="relative rounded-xl p-2 transition-all hover:bg-white/10 active:scale-95 {isDarkTheme
 						? 'text-slate-300 hover:text-white'
 						: 'text-gray-600 hover:text-blue-600'}"
 				>
@@ -137,8 +137,10 @@
 	<!-- Mobile Nav Drawer -->
 	{#if isMenuOpen}
 		<div
-			class="border-t backdrop-blur-xl md:hidden shadow-2xl border-b rounded-b-3xl overflow-hidden transition-all duration-300
-			{isDarkTheme ? 'border-white/10 bg-slate-950/95 text-white' : 'border-slate-200/80 bg-white/95 text-slate-800'}"
+			class="overflow-hidden rounded-b-3xl border-t border-b shadow-2xl backdrop-blur-xl transition-all duration-300 md:hidden
+			{isDarkTheme
+				? 'border-white/10 bg-slate-950/95 text-white'
+				: 'border-slate-200/80 bg-white/95 text-slate-800'}"
 			transition:slide={{ duration: 250 }}
 		>
 			<div class="space-y-1.5 px-4 pt-3 pb-4">

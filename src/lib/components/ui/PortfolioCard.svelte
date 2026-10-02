@@ -19,7 +19,7 @@
 </script>
 
 <div
-	class="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-gray-200 {className}"
+	class="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-gray-200 hover:shadow-xl {className}"
 >
 	<div class="relative aspect-video w-full overflow-hidden bg-slate-900">
 		<img
@@ -27,28 +27,34 @@
 			alt={title}
 			class="h-full w-full object-cover opacity-90 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
 		/>
-		<div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/20"></div>
+		<div
+			class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/20"
+		></div>
 
 		<span
-			class="absolute top-3 left-3 inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-extrabold text-white backdrop-blur-md shadow-md"
+			class="absolute top-3 left-3 inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-extrabold text-white shadow-md backdrop-blur-md"
 		>
-			<FlaskConical class="h-3 w-3" /> {category}
+			<FlaskConical class="h-3 w-3" />
+			{category}
 		</span>
 	</div>
 
 	<div class="flex flex-1 flex-col p-5 sm:p-6">
-		<h3 class="mb-2 text-base font-extrabold leading-snug text-slate-900 group-hover:text-blue-600 sm:text-lg transition-colors">
+		<h3
+			class="mb-2 text-base leading-snug font-extrabold text-slate-900 transition-colors group-hover:text-blue-600 sm:text-lg"
+		>
 			{title}
 		</h3>
-		<p class="mb-5 flex-1 text-xs leading-relaxed text-slate-600 line-clamp-3 sm:text-sm">
+		<p class="mb-5 line-clamp-3 flex-1 text-xs leading-relaxed text-slate-600 sm:text-sm">
 			{description}
 		</p>
 		<div class="mt-auto border-t border-gray-100 pt-4">
 			<a
+				// eslint-disable-next-line svelte/no-navigation-without-resolve
 				{href}
 				target={href.startsWith('http') ? '_blank' : '_self'}
-				rel={href.startsWith('http') ? 'noopener noreferrer' : ''}
-				class="inline-flex min-h-[42px] w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-800 transition-all hover:bg-blue-600 hover:text-white hover:border-blue-600 active:scale-95"
+				rel={href.startsWith('http') ? 'noopener noreferrer external' : ''}
+				class="inline-flex min-h-[42px] w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-800 transition-all hover:border-blue-600 hover:bg-blue-600 hover:text-white active:scale-95"
 			>
 				Detail Penelitian <ExternalLink class="h-3.5 w-3.5" />
 			</a>

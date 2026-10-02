@@ -2,20 +2,14 @@
 	import { Search, ArrowRight, BookOpen, Clock, Send } from '@lucide/svelte';
 	import ArticleCard from '$lib/components/ui/ArticleCard.svelte';
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 	import { resolve } from '$app/paths';
+	import { blogsConfig } from '$cms/pages';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const categories = [
-		{ id: 'all', label: 'Semua Artikel' },
-		{ id: 'analisis-data', label: 'Analisis Data' },
-		{ id: 'metodologi', label: 'Metodologi Penelitian' },
-		{ id: 'publikasi-scopus', label: 'Publikasi Scopus' },
-		{ id: 'ai-education', label: 'AI & Education' },
-		{ id: 'vr-learning', label: 'VR Learning' }
-	];
+	const categories = blogsConfig.categories;
 
 	let selectedCategory = $state('all');
 	let searchQuery = $state('');
@@ -83,8 +77,8 @@
 </script>
 
 <SEO
-	title="Blog & Artikel Edukasi | Dr. I Ketut Andika Pradnyana"
-	description="Kumpulan artikel edukator & panduan praktis Dr. I Ketut Andika Pradnyana seputar AI Education, VR Learning, Strategi Publikasi Scopus, dan Analisis Data."
+	title="Blog & Artikel Edukasi | I Ketut Andika Pradnyana"
+	description="Kumpulan artikel edukator & panduan praktis I Ketut Andika Pradnyana seputar AI Education, VR Learning, Strategi Publikasi Scopus, dan Analisis Data."
 	canonical="{SITE_CONFIG.url}/blogs"
 />
 
@@ -98,11 +92,10 @@
 
 		<div class="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
 			<h1 class="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-				Blog & Artikel Edukasi
+				{blogsConfig.hero.title}
 			</h1>
 			<p class="mx-auto mb-8 max-w-2xl text-base text-slate-300 sm:text-lg">
-				Temukan artikel terbaru seputar inovasi pendidikan, teknologi pembelajaran, tips penelitian,
-				dan tren terkini di dunia akademik.
+				{blogsConfig.hero.description}
 			</p>
 
 			<!-- Search Bar -->
@@ -112,7 +105,7 @@
 						type="text"
 						bind:value={searchQuery}
 						oninput={handleSearchInput}
-						placeholder="Cari topik atau judul artikel..."
+						placeholder={blogsConfig.hero.searchPlaceholder}
 						class="w-full rounded-2xl border border-white/20 bg-white/10 py-3.5 pr-12 pl-5 text-base text-white placeholder-slate-400 shadow-xl backdrop-blur-md focus:border-blue-400 focus:outline-none sm:text-sm"
 					/>
 					<Search class="absolute top-3.5 right-4 h-5 w-5 text-slate-300" />
@@ -207,7 +200,7 @@
 									>
 										DA
 									</div>
-									<span class="text-xs font-bold text-slate-800">Dr. Andika</span>
+									<span class="text-xs font-bold text-slate-800">Andika</span>
 								</div>
 
 								<a

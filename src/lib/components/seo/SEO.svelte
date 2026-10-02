@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 
 	interface Props {
 		title?: string;
@@ -82,7 +82,7 @@
 
 	<!-- JSON-LD Structured Data Injection -->
 	{#if jsonLdScript}
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		<!-- eslint-disable-next-line svelte/no-at-html-tags, @typescript-eslint/no-unused-expressions -->
 		{@html '<script type="application/ld+json">' + jsonLdScript + '</script>'}
 	{/if}
 </svelte:head>

@@ -13,19 +13,18 @@
 		GraduationCap,
 		Cpu,
 		BarChart3,
-		ShoppingBag,
-		Sparkles
+		Download
 	} from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 
-	import { getAllResearch, getResearchSchema } from '$lib/data/research';
-	import { getAllPublications, getPublicationSchema } from '$lib/data/publications';
-	import { getAllHki, getHkiSchema } from '$lib/data/hki';
-	import { getAllPengabdian, getPengabdianSchema } from '$lib/data/pengabdian';
-	import { getAllInovasi, getInovasiSchema } from '$lib/data/inovasi';
+	import { getAllResearch, getResearchSchema, RESEARCH_CATEGORY_LABELS } from '$cms';
+	import { getAllPublications, getPublicationSchema } from '$cms';
+	import { getAllHki, getHkiSchema } from '$cms';
+	import { getAllPengabdian, getPengabdianSchema } from '$cms';
+	import { getAllInovasi, getInovasiSchema } from '$cms';
 
 	import PortfolioCard from '$lib/components/ui/PortfolioCard.svelte';
 	import PublicationCard from '$lib/components/ui/PublicationCard.svelte';
@@ -68,8 +67,8 @@
 </script>
 
 <SEO
-	title="Portofolio Karya & Inovasi | Dr. I Ketut Andika Pradnyana"
-	description="Portofolio lengkap karya penelitian, publikasi Scopus, HKI, pengabdian masyarakat, & inovasi AI/VR Dr. I Ketut Andika Pradnyana."
+	title="Portofolio Karya & Inovasi | I Ketut Andika Pradnyana"
+	description="Portofolio lengkap karya penelitian, publikasi Scopus, HKI, pengabdian masyarakat, & inovasi AI/VR I Ketut Andika Pradnyana."
 	canonical="{SITE_CONFIG.url}/portofolio"
 	jsonLd={pageSchemas}
 />
@@ -118,7 +117,7 @@
 				</h1>
 				<p class="mb-8 text-sm leading-relaxed text-slate-600 sm:text-base">
 					Rekam jejak kontribusi akademik, hibah penelitian terapan, hak kekayaan intelektual (HKI),
-					dan produk inovasi teknopedagogi Dr. I Ketut Andika Pradnyana.
+					dan produk inovasi teknopedagogi I Ketut Andika Pradnyana.
 				</p>
 			</div>
 
@@ -127,12 +126,10 @@
 				<div
 					class="relative h-[340px] w-full max-w-[340px] sm:h-[460px] sm:max-w-[440px] lg:h-[480px]"
 				>
-					<div
-						class="absolute inset-0 rounded-t-3xl"
-					></div>
+					<div class="absolute inset-0 rounded-t-3xl"></div>
 					<img
-						src={resolve('/images/andika.png')}
-						alt="Dr. I Ketut Andika Pradnyana"
+						src="/images/andika.png"
+						alt="I Ketut Andika Pradnyana"
 						class="absolute bottom-0 left-1/2 h-full max-h-[340px] w-auto -translate-x-1/2 object-contain drop-shadow-2xl sm:max-h-[460px] lg:max-h-[480px]"
 					/>
 				</div>
@@ -169,7 +166,7 @@
 </section>
 
 <!-- Quick Stats Counter -->
-<section class="py-4 mb-8">
+<section class="mb-8 py-4">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
 			<div
@@ -181,8 +178,12 @@
 					<FlaskConical class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{researchList.length}+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Penelitian</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl"
+						>{researchList.length}+</span
+					>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>Penelitian</span
+					>
 				</div>
 			</div>
 
@@ -195,8 +196,12 @@
 					<FileText class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{publicationList.length}+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Publikasi</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl"
+						>{publicationList.length}+</span
+					>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>Publikasi</span
+					>
 				</div>
 			</div>
 
@@ -210,7 +215,9 @@
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{hkiList.length}+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">HKI & Paten</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>HKI & Paten</span
+					>
 				</div>
 			</div>
 
@@ -224,7 +231,9 @@
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">5+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Buku & Modul</span>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>Buku & Modul</span
+					>
 				</div>
 			</div>
 
@@ -237,8 +246,12 @@
 					<Users class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{pengabdianList.length}+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Pengabdian</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl"
+						>{pengabdianList.length}+</span
+					>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>Pengabdian</span
+					>
 				</div>
 			</div>
 
@@ -251,8 +264,12 @@
 					<Lightbulb class="h-6 w-6 sm:h-7 sm:w-7" />
 				</div>
 				<div class="flex flex-col">
-					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl">{inovasiList.length}+</span>
-					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm">Inovasi</span>
+					<span class="text-2xl font-extrabold text-slate-900 sm:text-3xl"
+						>{inovasiList.length}+</span
+					>
+					<span class="text-xs font-medium whitespace-nowrap text-slate-500 sm:text-sm"
+						>Inovasi</span
+					>
 				</div>
 			</div>
 		</div>
@@ -282,7 +299,7 @@
 				{#each researchList as item (item.id)}
 					<PortfolioCard
 						image={item.image}
-						category={item.categoryLabel}
+						category={RESEARCH_CATEGORY_LABELS[item.category]}
 						title={item.title}
 						description={`${item.funding} — ${item.description}`}
 						href={item.targetUrl || resolve('/contact')}
@@ -329,7 +346,9 @@
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
 				<div>
-					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Hak Kekayaan Intelektual (HKI)</h2>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+						Hak Kekayaan Intelektual (HKI)
+					</h2>
 					<p class="text-xs text-slate-500 sm:text-sm">
 						Menampilkan {hkiList.length} sertifikat hak cipta & paten resmi DJKI
 					</p>
@@ -355,33 +374,42 @@
 
 <!-- 4. Buku Section -->
 {#if activeCategory === 'all' || activeCategory === 'buku'}
-	<section class="py-12 bg-slate-50 border-t border-gray-100">
+	<section class="border-t border-gray-100 bg-slate-50 py-12">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-			<div class="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-gray-200 pb-4">
+			<div
+				class="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-gray-200 pb-4"
+			>
 				<div>
-					<span class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
-						<Sparkles class="h-3.5 w-3.5" /> KARYA LITERASI & E-BOOK
-					</span>
-					<h2 class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">Buku & Modul Pembelajaran</h2>
+					<h2 class="mt-2 text-2xl font-bold text-slate-900 sm:text-3xl">
+						Buku & Modul Pembelajaran
+					</h2>
 					<p class="text-xs text-slate-500 sm:text-sm">
 						Kumpulan buku referensi akademik, e-book praktis, dan modul metodologi penelitian.
 					</p>
 				</div>
 				<a
-					href={resolve('/store')}
-					class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:bg-blue-700 hover:scale-105 active:scale-95"
+					href={SITE_CONFIG.author.cvUrl}
+					target="_blank"
+					rel="external"
+					class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all hover:scale-105 hover:bg-blue-700 active:scale-95"
 				>
-					Kunjungi Academy Store <ShoppingBag class="h-4 w-4" />
+					Unduh CV <Download class="h-4 w-4" />
 				</a>
 			</div>
 
 			<!-- Guiding Callout Box -->
-			<div class="relative overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-slate-900 via-primary-950 to-blue-950 p-6 text-white shadow-xl sm:p-10">
-				<div class="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none"></div>
+			<div
+				class="relative overflow-hidden rounded-3xl border border-blue-100 bg-gradient-to-br from-slate-900 via-primary-950 to-blue-950 p-6 text-white shadow-xl sm:p-10"
+			>
+				<div
+					class="pointer-events-none absolute -top-10 -right-10 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"
+				></div>
 
 				<div class="relative z-10 flex flex-col items-center justify-between gap-6 lg:flex-row">
 					<div class="flex items-start gap-4 sm:items-center">
-						<div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-blue-300 shadow-inner">
+						<div
+							class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-blue-300 shadow-inner"
+						>
 							<Library class="h-7 w-7" />
 						</div>
 						<div>
@@ -389,16 +417,20 @@
 								Akses Koleksi Lengkap Buku & Modul Digital
 							</h3>
 							<p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-300 sm:text-sm">
-								Seluruh publikasi buku referensi, e-book metode penelitian, template skripsi scopus, dan modul analisis data oleh Dr. I Ketut Andika Pradnyana kini dapat diakses dan diunduh secara langsung melalui <span class="font-bold text-blue-300">Academy Store</span>.
+								Seluruh publikasi buku referensi, e-book metode penelitian, template skripsi scopus,
+								dan modul analisis data oleh I Ketut Andika Pradnyana kini dapat diakses dan diunduh
+								secara langsung melalui <span class="font-bold text-blue-300">Academy Store</span>.
 							</p>
 						</div>
 					</div>
 
 					<a
-						href={resolve('/store')}
-						class="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-xs sm:text-sm font-extrabold text-slate-900 shadow-xl transition-all hover:bg-blue-50 hover:scale-105 active:scale-95 sm:w-auto"
+						href={SITE_CONFIG.author.cvUrl}
+						target="_blank"
+						rel="external"
+						class="inline-flex min-h-[48px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-xs font-extrabold text-slate-900 shadow-xl transition-all hover:scale-105 hover:bg-blue-50 active:scale-95 sm:w-auto sm:text-sm"
 					>
-						Lihat Koleksi Buku di Store <ArrowRight class="h-4 w-4 text-blue-600" />
+						Unduh CV <Download class="h-4 w-4 text-blue-600" />
 					</a>
 				</div>
 			</div>
@@ -412,7 +444,9 @@
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="mb-8 flex items-end justify-between border-b border-gray-200 pb-4">
 				<div>
-					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">Pengabdian Kepada Masyarakat</h2>
+					<h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+						Pengabdian Kepada Masyarakat
+					</h2>
 					<p class="text-xs text-slate-500 sm:text-sm">
 						Menampilkan {pengabdianList.length} program pengabdian & pelatihan pendidik
 					</p>

@@ -4,17 +4,16 @@
 		Phone,
 		MapPin,
 		Send,
-		MessageSquare,
-		Clock,
 		CheckCircle2,
-		Sparkles,
 		HelpCircle,
 		ChevronDown,
 		ArrowRight
 	} from '@lucide/svelte';
 	import SEO from '$lib/components/seo/SEO.svelte';
-	import { SITE_CONFIG } from '$lib/config/site';
+	import { SITE_CONFIG } from '$cms/site';
 	import { resolve } from '$app/paths';
+	import { contactConfig } from '$cms/pages';
+	import { faqConfig } from '$cms/pages';
 
 	let formSubmitted = $state(false);
 	let isSubmitting = $state(false);
@@ -44,33 +43,12 @@
 		}, 1200);
 	}
 
-	const faqs = [
-		{
-			question: 'Apakah konsultasi penelitian bisa dilakukan secara daring?',
-			answer:
-				'Ya, seluruh sesi bimbingan dan konsultasi dapat dijadwalkan secara daring melalui Zoom atau Google Meet.'
-		},
-		{
-			question: 'Bagaimana cara mengundang Dr. Andika sebagai narasumber/speker webinar?',
-			answer:
-				'Anda dapat mengisi formulir kontak di samping dengan memilih kategori "Undangan Narasumber / Speaker" dan mencantumkan detail acara.'
-		},
-		{
-			question: 'Apakah modul dan e-book yang dibeli di store bisa langsung diakses?',
-			answer:
-				'Ya, seluruh modul, e-book, dan template digital di Academy Store dapat diunduh secara langsung setelah transaksi berhasil.'
-		},
-		{
-			question: 'Berapa lama waktu respon untuk balasan email atau pesan?',
-			answer:
-				'Tim kami berusaha membalas seluruh pesan masuk dalam waktu 1x24 jam kerja (Senin - Jumat).'
-		}
-	];
+	const faqs = faqConfig.faqs;
 </script>
 
 <SEO
-	title="Hubungi Dr. I Ketut Andika Pradnyana | Andika Academy"
-	description="Layanan konsultasi & kontak resmi Dr. I Ketut Andika Pradnyana, S.Pd., M.Pd. Bimbingan riset, konsultasi instansi, pelatihan AI Education, & pengajuan kerjasama."
+	title="Hubungi I Ketut Andika Pradnyana | Andika Academy"
+	description="Layanan konsultasi & kontak resmi I Ketut Andika Pradnyana, S.Pd., M.Pd. Bimbingan riset, konsultasi instansi, pelatihan AI Education, & pengajuan kerjasama."
 	canonical="{SITE_CONFIG.url}/contact"
 />
 
@@ -93,11 +71,10 @@
 			</nav>
 
 			<h1 class="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-				Hubungi Kami
+				{contactConfig.hero.title}
 			</h1>
 			<p class="mx-auto max-w-2xl text-base text-slate-300 sm:text-lg">
-				Punya pertanyaan, ide kolaborasi penelitian, atau butuh dukungan produk? Kami siap
-				mendengarkan dan berdiskusi dengan Anda.
+				{contactConfig.hero.description}
 			</p>
 		</div>
 	</section>
@@ -115,30 +92,32 @@
 					<Mail class="h-6 w-6" />
 				</div>
 				<div>
-					<span class="text-xs font-bold tracking-wider text-slate-400 uppercase">Email</span>
-					<h3 class="text-sm font-bold text-slate-900">info@andikaacademy.id</h3>
-					<p class="text-[11px] text-slate-500">Respon dalam 1x24 Jam</p>
+					<span class="text-xs font-bold tracking-wider text-slate-400 uppercase"
+						>{contactConfig.cards.email.label}</span
+					>
+					<h3 class="text-sm font-bold text-slate-900">{contactConfig.cards.email.value}</h3>
+					<p class="text-[11px] text-slate-500">{contactConfig.cards.email.note}</p>
 				</div>
 			</div>
 
 			<!-- WhatsApp Card -->
 			<a
-				href="https://wa.me/6281338005074"
+				href={contactConfig.cards.whatsapp.url}
 				target="_blank"
-				rel="noopener noreferrer"
-				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xl transition-all hover:shadow-2xl hover:border-emerald-200"
+				rel="noopener noreferrer external"
+				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xl transition-all hover:border-blue-200 hover:shadow-2xl"
 			>
 				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
 				>
 					<Phone class="h-6 w-6" />
 				</div>
 				<div>
 					<span class="text-xs font-bold tracking-wider text-slate-400 uppercase"
-						>WhatsApp / Telp</span
+						>{contactConfig.cards.whatsapp.label}</span
 					>
-					<h3 class="text-sm font-bold text-slate-900">+62 813-3800-5074</h3>
-					<p class="text-[11px] text-slate-500">Senin &ndash; Jumat (08:00 - 17:00)</p>
+					<h3 class="text-sm font-bold text-slate-900">{contactConfig.cards.whatsapp.value}</h3>
+					<p class="text-[11px] text-slate-500">{contactConfig.cards.whatsapp.note}</p>
 				</div>
 			</a>
 
@@ -147,16 +126,16 @@
 				class="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-xl transition-shadow hover:shadow-2xl"
 			>
 				<div
-					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-purple-50 text-purple-600"
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600"
 				>
 					<MapPin class="h-6 w-6" />
 				</div>
 				<div>
 					<span class="text-xs font-bold tracking-wider text-slate-400 uppercase"
-						>Lokasi Akademik</span
+						>{contactConfig.cards.location.label}</span
 					>
-					<h3 class="text-sm font-bold text-slate-900">Singaraja & Denpasar, Bali</h3>
-					<p class="text-[11px] text-slate-500">Universitas Pendidikan Ganesha</p>
+					<h3 class="text-sm font-bold text-slate-900">{contactConfig.cards.location.value}</h3>
+					<p class="text-[11px] text-slate-500">{contactConfig.cards.location.note}</p>
 				</div>
 			</div>
 		</div>
@@ -169,19 +148,20 @@
 			<div class="lg:col-span-7">
 				<div class="rounded-3xl border border-gray-100 bg-white p-6 shadow-xs sm:p-10">
 					<div class="mb-6">
-						<h2 class="text-2xl font-extrabold text-slate-900 sm:text-3xl">Kirim Pesan</h2>
+						<h2 class="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+							{contactConfig.form.title}
+						</h2>
 						<p class="mt-1 text-xs text-slate-500 sm:text-sm">
-							Silakan isi formulir di bawah ini. Kami akan membalas ke email Anda secepat mungkin.
+							{contactConfig.form.description}
 						</p>
 					</div>
 
 					{#if formSubmitted}
 						<div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
 							<CheckCircle2 class="mx-auto mb-3 h-12 w-12 text-emerald-600" />
-							<h3 class="text-lg font-bold text-emerald-900">Pesan Berhasil Terkirim!</h3>
+							<h3 class="text-lg font-bold text-emerald-900">{contactConfig.form.successTitle}</h3>
 							<p class="mt-1 text-xs text-emerald-700 sm:text-sm">
-								Terima kasih telah menghubungi kami. Tim kami akan segera meninjau dan membalas
-								pesan Anda.
+								{contactConfig.form.successMessage}
 							</p>
 							<button
 								onclick={() => (formSubmitted = false)}
@@ -245,10 +225,9 @@
 										class="w-full rounded-xl border border-gray-200 bg-slate-50/50 p-3.5 text-base text-slate-800 focus:border-blue-500 focus:bg-white focus:outline-none sm:text-sm"
 									>
 										<option value="">Pilih topik permasalahan</option>
-										<option value="kolaborasi">Kerja Sama / Kolaborasi Penelitian</option>
-										<option value="narasumber">Permohonan Narasumber / Pelatihan</option>
-										<option value="store">Dukungan Produk Store</option>
-										<option value="pertanyaan">Pertanyaan Umum</option>
+										{#each contactConfig.form.subjects as subject (subject.value)}
+											<option value={subject.value}>{subject.label}</option>
+										{/each}
 									</select>
 								</div>
 							</div>
@@ -292,23 +271,18 @@
 				<div
 					class="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-600 to-teal-700 p-6 text-white shadow-md sm:p-8"
 				>
-					<div
-						class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-bold tracking-wider text-white uppercase backdrop-blur-xs"
-					>
-						<MessageSquare class="h-3.5 w-3.5" /> DUKUNGAN CEPAT
-					</div>
-					<h3 class="mb-2 text-xl font-bold text-white">Butuh Respon Instan?</h3>
+					<h3 class="mb-2 text-xl font-bold text-white">{contactConfig.support.title}</h3>
 					<p class="mb-6 text-xs leading-relaxed text-emerald-100">
-						Hubungi tim kami secara langsung via WhatsApp untuk pertanyaan seputar modul
-						pembelajaran, konsultasi, atau informasi penelitian.
+						{contactConfig.support.description}
 					</p>
 					<a
-						href="https://wa.me/6281338005074"
+						href={contactConfig.cards.whatsapp.url}
 						target="_blank"
-						rel="noopener noreferrer"
+						rel="noopener noreferrer external"
 						class="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-xs font-bold text-emerald-800 shadow-md transition-colors hover:bg-emerald-50"
 					>
-						Chat WhatsApp Sekarang <ArrowRight class="h-4 w-4" />
+						{contactConfig.support.buttonText}
+						<ArrowRight class="h-4 w-4" />
 					</a>
 				</div>
 

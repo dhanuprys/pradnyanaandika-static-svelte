@@ -1,0 +1,24 @@
+---
+title: "KodiBot AI - Conversational Tutor Suite"
+status: "Production"
+techStack:
+  - "Svelte 5"
+  - "Python Fast API"
+  - "OpenAI API"
+  - "TailwindCSS"
+description: "Platform web berbasis kecerdasan buatan yang menyediakan tutoring interaktif 24/7 dan umpan balik otomatis untuk tugas akademik."
+image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+demoUrl: "https://wa.me/6281338005074"
+features:
+  - "Umpan balik naskah real-time berbasis NLP"
+  - "Integrasi Rubrik Akademik Scopus & SINTA"
+  - "Multi-Bahasa (Indonesia & Inggris)"
+  - "Socratic Tutoring Mode (Menghindari Plagiarisme AI)"
+  - "Dashboard analitik untuk Dosen"
+---
+
+KodiBot AI merupakan solusi terpadu untuk mengatasi keterbatasan pendampingan belajar di luar jam kelas. Sistem ini menggunakan arsitektur Large Language Model (LLM) yang disesuaikan secara khusus dengan konteks kurikulum pendidikan tinggi di Indonesia.
+
+Tidak sekadar memberikan jawaban langsung (_spoon-feeding_), KodiBot dilatih menggunakan metode Socratic yang mendorong mahasiswa untuk berpikir kritis, menemukan kesalahan logika mereka sendiri, dan memperbaiki struktur penulisan ilmiah mereka secara mandiri.
+
+Dengan antarmuka yang sangat responsif, mahasiswa dapat berinteraksi, mengirimkan draft naskah, dan mendapatkan evaluasi instan berdasarkan rubrik akademik yang telah dikalibrasi oleh pakar.
