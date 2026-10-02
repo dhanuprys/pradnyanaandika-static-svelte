@@ -50,7 +50,7 @@
 
 		<div class="mt-2 w-full shrink-0 sm:w-auto md:mt-0">
 			<a
-				href={resolve(buttonHref)}
+				href={resolve(buttonHref as '/')}
 				class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-extrabold text-slate-900 shadow-xl transition-all hover:scale-105 hover:bg-blue-50 focus:ring-4 focus:ring-white/30 focus:outline-none active:scale-95 sm:w-auto"
 			>
 				{buttonText}

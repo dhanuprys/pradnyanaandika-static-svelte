@@ -36,7 +36,7 @@ export const SITE_CONFIG = {
 		jobTitle: 'Lecturer & Researcher in Educational Technology',
 		avatar: 'https://pradnya.com/images/andika.png',
 		url: 'https://pradnya.com/about',
-		cvUrl: '/files/cv-andika.pdf',
+		cvUrl: '/files/cv-andika.md',
 		sameAs: [
 			'https://scholar.google.com',
 			'https://scopus.com',

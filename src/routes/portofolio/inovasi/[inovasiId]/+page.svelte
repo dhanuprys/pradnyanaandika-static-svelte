@@ -6,10 +6,11 @@
 	import SEO from '$lib/components/seo/SEO.svelte';
 	import { SITE_CONFIG } from '$cms/site';
 	import { getInovasiSchema } from '$cms';
+	import type { PageProps } from './$types';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 
-	const { inovasi } = data;
+	const inovasi = $derived(data.inovasi);
 	const Content: Component = $derived(inovasi.content);
 	const inovasiSchema = $derived(getInovasiSchema(inovasi));
 </script>
